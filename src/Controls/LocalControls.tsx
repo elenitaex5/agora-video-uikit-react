@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import PropsContext from '../PropsContext'
 import EndCall from './Local/EndCall'
+import FullScreen from './Local/FullScreen'
 import LocalAudioMute from './Local/LocalAudioMute'
 import LocalVideoMute from './Local/LocalVideoMute'
 import Screenshare from './Local/Screenshare'
@@ -29,6 +30,7 @@ function LocalControls() {
       {rtcProps.role !== 'audience' && showTimer && <Timer />}
       {rtcProps.role !== 'audience' && <LocalVideoMute />}
       {rtcProps.role !== 'audience' && <LocalAudioMute />}
+      {rtcProps.role !== 'audience' && <FullScreen />}
       {rtcProps.role !== 'audience' && rtcProps.enableScreensharing && (
         <Screenshare />
       )}
