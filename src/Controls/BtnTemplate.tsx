@@ -36,7 +36,7 @@ console.log(customIcon, name)
       }}
       onClick={onClick}
     >
-      {customIcon ? (
+      {customIcon?[name] ? (
         <img src={customIcon[name]} alt={name} />
       ) : (
         <svg
