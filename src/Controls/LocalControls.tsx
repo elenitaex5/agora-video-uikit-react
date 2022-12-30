@@ -9,7 +9,11 @@ import Timer from './Local/Timer'
 
 function LocalControls() {
   const { styleProps, rtcProps } = useContext(PropsContext)
-  const {localBtnContainer, showTimer = false} = styleProps || {}
+  const {
+    localBtnContainer,
+    showTimer = false,
+    localBtnWrapper = {}
+  } = styleProps || {}
 
   return (
     <div
@@ -27,14 +31,16 @@ function LocalControls() {
         ...localBtnContainer
       }}
     >
-      {rtcProps.role !== 'audience' && showTimer && <Timer />}
-      {rtcProps.role !== 'audience' && <LocalVideoMute />}
-      {rtcProps.role !== 'audience' && <LocalAudioMute />}
-      {rtcProps.role !== 'audience' && <FullScreen />}
-      {rtcProps.role !== 'audience' && rtcProps.enableScreensharing && (
-        <Screenshare />
-      )}
-      <EndCall />
+      <div style={{ width: 350, ...localBtnWrapper }}>
+        {rtcProps.role !== 'audience' && showTimer && <Timer />}
+        {rtcProps.role !== 'audience' && <LocalVideoMute />}
+        {rtcProps.role !== 'audience' && <LocalAudioMute />}
+        {rtcProps.role !== 'audience' && <FullScreen />}
+        {rtcProps.role !== 'audience' && rtcProps.enableScreensharing && (
+          <Screenshare />
+        )}
+        <EndCall />
+      </div>
     </div>
   )
 }
