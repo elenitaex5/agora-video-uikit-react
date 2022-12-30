@@ -31,7 +31,7 @@ function LocalControls() {
         ...localBtnContainer
       }}
     >
-      <div style={{ width: 350, ...localBtnWrapper }}>
+      <div id='wrapper' style={{ width: 350, ...localBtnWrapper }}>
         {rtcProps.role !== 'audience' && showTimer && <Timer />}
         {rtcProps.role !== 'audience' && <LocalVideoMute />}
         {rtcProps.role !== 'audience' && <LocalAudioMute />}
