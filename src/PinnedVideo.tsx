@@ -40,7 +40,7 @@ const PinnedVideo: React.FC = () => {
   }, [])
 
   return (
-    <div
+    <div id={'pinnedvideo'}
       ref={parentRef}
       style={{
         ...{
@@ -70,6 +70,7 @@ const PinnedVideo: React.FC = () => {
         </MaxUidConsumer>
       </div>
       <div
+      id={'loscroll'}
         className={styles.scrollbar}
         style={{
           ...{
