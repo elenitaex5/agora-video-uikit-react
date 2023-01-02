@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { MinUidConsumer } from './MinUidContext'
-import { MaxUidConsumer } from './MaxUidContext'
+import MaxUidContext, { MaxUidConsumer } from './MaxUidContext'
 import MaxVideoView from './MaxVideoView'
+import MinUidContext, { MinUidConsumer } from './MinUidContext'
 import MinVideoView from './MinVideoView'
 import PropsContext from './PropsContext'
 import styles from './styles.module.css'
@@ -11,6 +11,12 @@ import styles from './styles.module.css'
  */
 const PinnedVideo: React.FC = () => {
   const { styleProps, rtcProps } = useContext(PropsContext)
+  const max = useContext(MaxUidContext)
+  const min = useContext(MinUidContext)
+  const users =
+    rtcProps.role === 'audience'
+      ? [...max, ...min].filter((user) => user.uid !== 0)
+      : [...max, ...min]
   const {
     minViewContainer,
     pinnedVideoContainer,
@@ -21,7 +27,7 @@ const PinnedVideo: React.FC = () => {
   const [width, setWidth] = useState(0)
   const [height, setHeight] = useState(0)
   const isLandscape = width > height
-
+  console.log('users', users)
   useEffect(() => {
     const handleResize = () => {
       if (parentRef.current) {
@@ -38,9 +44,9 @@ const PinnedVideo: React.FC = () => {
       window.removeEventListener('resize', handleResize)
     }
   }, [])
-
   return (
-    <div id={'pinnedvideo'}
+    <div
+      id='pinnedvideo'
       ref={parentRef}
       style={{
         ...{
@@ -70,7 +76,7 @@ const PinnedVideo: React.FC = () => {
         </MaxUidConsumer>
       </div>
       <div
-      id={'loscroll'}
+        id='loscroll'
         className={styles.scrollbar}
         style={{
           ...{
