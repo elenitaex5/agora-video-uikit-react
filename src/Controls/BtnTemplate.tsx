@@ -13,7 +13,6 @@ const BtnTemplate = (props: BtnTemplateInterface) => {
   const { onClick, name, disabled, style } = props
   const { styleProps } = useContext(PropsContext)
   const { theme, BtnTemplateStyles, iconSize, customIcon } = styleProps || {}
-  console.log(customIcon, name)
   return (
     <div
       style={{

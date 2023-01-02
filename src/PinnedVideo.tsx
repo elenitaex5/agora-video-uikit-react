@@ -27,7 +27,7 @@ const PinnedVideo: React.FC = () => {
   const [width, setWidth] = useState(0)
   const [height, setHeight] = useState(0)
   const isLandscape = width > height
-  console.log('users', users)
+
   useEffect(() => {
     const handleResize = () => {
       if (parentRef.current) {
@@ -75,43 +75,44 @@ const PinnedVideo: React.FC = () => {
           }
         </MaxUidConsumer>
       </div>
-      <div
-        id='loscroll'
-        className={styles.scrollbar}
-        style={{
-          ...{
-            overflowY: isLandscape ? 'scroll' : 'hidden',
-            overflowX: !isLandscape ? 'scroll' : 'hidden',
-            display: 'flex',
-            flex: 1,
-            flexDirection: isLandscape ? 'column' : 'row'
-          },
-          ...scrollViewContainer
-        }}
-      >
-        <MinUidConsumer>
-          {(minUsers) =>
-            minUsers.map((user) =>
-              rtcProps.role === 'audience' && user.uid === 0 ? null : (
-                <div
-                  style={{
-                    ...{
-                      minHeight: isLandscape ? '35vh' : '99%',
-                      minWidth: isLandscape ? '99%' : '40vw',
-                      margin: 2,
-                      display: 'flex'
-                    },
-                    ...minViewContainer
-                  }}
-                  key={user.uid}
-                >
-                  <MinVideoView user={user} />
-                </div>
+      {users?.length > 1 && (
+        <div
+          className={styles.scrollbar}
+          style={{
+            ...{
+              overflowY: isLandscape ? 'scroll' : 'hidden',
+              overflowX: !isLandscape ? 'scroll' : 'hidden',
+              display: 'flex',
+              flex: 1,
+              flexDirection: isLandscape ? 'column' : 'row'
+            },
+            ...scrollViewContainer
+          }}
+        >
+          <MinUidConsumer>
+            {(minUsers) =>
+              minUsers.map((user) =>
+                rtcProps.role === 'audience' && user.uid === 0 ? null : (
+                  <div
+                    style={{
+                      ...{
+                        minHeight: isLandscape ? '35vh' : '99%',
+                        minWidth: isLandscape ? '99%' : '40vw',
+                        margin: 2,
+                        display: 'flex'
+                      },
+                      ...minViewContainer
+                    }}
+                    key={user.uid}
+                  >
+                    <MinVideoView user={user} />
+                  </div>
+                )
               )
-            )
-          }
-        </MinUidConsumer>
-      </div>
+            }
+          </MinUidConsumer>
+        </div>
+      )}
     </div>
   )
 }
