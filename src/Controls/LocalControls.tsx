@@ -33,7 +33,12 @@ function LocalControls() {
     >
       <div
         id='wrapper'
-        style={{ width: 350, flexDirection: 'row', ...localBtnWrapper }}
+        style={{
+          width: 350,
+          flexDirection: 'row',
+          display: 'flex',
+          ...localBtnWrapper
+        }}
       >
         {rtcProps.role !== 'audience' && showTimer && <Timer />}
         {rtcProps.role !== 'audience' && <LocalVideoMute />}

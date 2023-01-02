@@ -15,7 +15,7 @@ function FullScreen() {
     }
     if (action === 'normal') {
       callbacks?.NormalScreen && callbacks.NormalScreen()
-      setAction('fulSceren')
+      setAction('fullScreen')
     }
   }
 
