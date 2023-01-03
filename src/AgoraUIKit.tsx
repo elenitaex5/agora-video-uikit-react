@@ -2,19 +2,20 @@
  * @module AgoraUIKit
  */
 import React, { useContext } from 'react'
-import RtcConfigure from './RTCConfigure'
-import PropsContext, {
-  PropsProvider,
-  PropsInterface,
-  layout
-} from './PropsContext'
 import LocalControls from './Controls/LocalControls'
-import PinnedVideo from './PinnedVideo'
-import GridVideo from './GridVideo'
-import TracksConfigure from './TracksConfigure'
-import RtmConfigure from './RTMConfigure'
-import LocalUserContext from './LocalUserContext'
 import PopUp from './Controls/Remote/RemoteMutePopUp'
+import GridVideo from './GridVideo'
+import LocalUserContext from './LocalUserContext'
+import PinnedVideo from './PinnedVideo'
+import PropsContext, {
+  layout,
+  PropsInterface,
+  PropsProvider
+} from './PropsContext'
+import RtcConfigure from './RTCConfigure'
+import RtmConfigure from './RTMConfigure'
+import TracksConfigure from './TracksConfigure'
+import VirtualBackground from './VirtualBackground'
 
 /**
  * High level component to render the UI Kit
@@ -61,6 +62,7 @@ export const VideocallUI = () => {
             <LocalControls />
           </RtmConfigure>
         )}
+        <VirtualBackground />
       </LocalUserContext>
     </RtcConfigure>
   )

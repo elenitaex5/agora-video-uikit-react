@@ -1,25 +1,25 @@
-import React, { useState, useContext, useEffect, useRef } from 'react'
+import AgoraRTC, { UID } from 'agora-rtc-react'
 import AgoraRTM, {
-  createLazyClient,
   createLazyChannel,
+  createLazyClient,
   RtmEvents,
   RtmMessage
 } from 'agora-rtm-react'
-import PropsContext from './PropsContext'
-import {
-  RtmProvider,
-  muteRequest,
-  mutingDevice,
-  rtmStatusEnum,
-  userData,
-  popUpStateEnum,
-  messageObject
-} from './RtmContext'
-import RtcContext from './RtcContext'
-import AgoraRTC, { UID } from 'agora-rtc-react'
-import { LocalContext } from './LocalUserContext'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import muteAudio from './Controls/Local/muteAudio'
 import muteVideo from './Controls/Local/muteVideo'
+import { LocalContext } from './LocalUserContext'
+import PropsContext from './PropsContext'
+import RtcContext from './RtcContext'
+import {
+  messageObject,
+  muteRequest,
+  mutingDevice,
+  popUpStateEnum,
+  RtmProvider,
+  rtmStatusEnum,
+  userData
+} from './RtmContext'
 
 const timeNow = () => new Date().getTime()
 const useChannel = createLazyChannel()
