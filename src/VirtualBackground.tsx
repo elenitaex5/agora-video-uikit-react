@@ -25,7 +25,7 @@ const VirtualBackground = () => {
       localVideoTrack
         .pipe(processor.current)
         .pipe(localVideoTrack.processorDestination)
-      processor.current.setOptions({ type: 'color', color: '#ff00ff' })
+      processor.current.setOptions({ type: 'blur', blurDegree: 2 })
       await processor.current.enable()
       setExtensionActive(true)
     }
