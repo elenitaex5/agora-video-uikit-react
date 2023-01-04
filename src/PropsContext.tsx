@@ -337,6 +337,10 @@ export interface RtcPropsInterface {
    * Disable Agora RTM, this also disables the use of usernames and remote mute functionality
    */
   disableRtm?: boolean
+  /**
+   * Enable blur background for local video. By default is false
+   */
+  enableBlurBackground?: boolean
 }
 
 /**

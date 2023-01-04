@@ -15,7 +15,6 @@ import PropsContext, {
 import RtcConfigure from './RTCConfigure'
 import RtmConfigure from './RTMConfigure'
 import TracksConfigure from './TracksConfigure'
-import VirtualBackground from './VirtualBackground'
 
 /**
  * High level component to render the UI Kit
@@ -62,7 +61,6 @@ export const VideocallUI = () => {
             <LocalControls />
           </RtmConfigure>
         )}
-        <VirtualBackground />
       </LocalUserContext>
     </RtcConfigure>
   )

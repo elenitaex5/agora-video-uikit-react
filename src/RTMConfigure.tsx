@@ -115,7 +115,9 @@ const RtmConfigure = (props: any) => {
   }
 
   const joinChannel = async () => {
-    await blurBackground()
+    if (rtcProps?.enableBlurBackground) {
+      await blurBackground()
+    }
     try {
       await channel.join()
       timerValueRef.current = 5
