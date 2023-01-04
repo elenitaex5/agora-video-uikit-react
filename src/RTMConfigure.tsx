@@ -93,7 +93,10 @@ const RtmConfigure = (props: any) => {
 
   const blurBackground = async () => {
     console.log('in blur')
+    console.log(processor.current)
+    console.log(localVideoTrack)
     if (processor.current && localVideoTrack) {
+      console.log('inside if')
       localVideoTrack
         .pipe(processor.current)
         .pipe(localVideoTrack.processorDestination)
@@ -109,6 +112,7 @@ const RtmConfigure = (props: any) => {
       console.log('before channel')
       await channel.join()
       timerValueRef.current = 5
+      await blurBackground()
     } catch (error) {
       setTimeout(async () => {
         timerValueRef.current = timerValueRef.current + timerValueRef.current
