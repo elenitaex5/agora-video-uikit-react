@@ -1,4 +1,6 @@
-import { IVirtualBackgroundProcessor } from 'agora-extension-virtual-background'
+import VirtualBackgroundExtension, {
+  IVirtualBackgroundProcessor
+} from 'agora-extension-virtual-background'
 import AgoraRTC, { UID } from 'agora-rtc-react'
 import AgoraRTM, {
   createLazyChannel,
@@ -35,6 +37,8 @@ const RtmConfigure = (props: any) => {
   const channel = useChannel(rtmClient, rtcProps.channel)
   const localUid = useRef<string>('')
   const timerValueRef: any = useRef(5)
+  const ext = useRef(new VirtualBackgroundExtension())
+
   const processor = useRef<IVirtualBackgroundProcessor>()
   const local = useContext(LocalContext)
   const { rtmCallbacks } = useContext(PropsContext)
@@ -54,6 +58,15 @@ const RtmConfigure = (props: any) => {
     dispatch,
     channelJoined
   } = useContext(RtcContext)
+
+  useEffect(() => {
+    const initExtension = async () => {
+      AgoraRTC.registerExtensions([ext.current])
+      processor.current = ext.current.createProcessor()
+      await processor.current.init('<Path to WASM module>')
+    }
+    initExtension()
+  }, [])
 
   const login = async () => {
     const { tokenUrl } = rtcProps
