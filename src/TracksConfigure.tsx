@@ -36,12 +36,14 @@ const TracksConfigure: React.FC<
     error: environmentError
   } = useEnvironmentTrack()
   const mediaStore = useRef<mediaStore>({})
+  const [isSwapped, setIsSwapped] = useState<boolean>(false)
 
   const swapCamera = () => {
-    if (environmentTrack && mediaStore.current[0]) {
-      mediaStore.current[0].videoTrack = environmentTrack
-      setLocalVideoTrack(environmentTrack)
-    }
+    if (!environmentTrack || !tracks || !tracks[1]) return
+
+    const newTrack = isSwapped ? environmentTrack : tracks[1]
+    mediaStore.current[0].videoTrack = newTrack
+    setLocalVideoTrack(newTrack)
   }
 
   useEffect(() => {
@@ -62,12 +64,16 @@ const TracksConfigure: React.FC<
 
     return () => {
       console.log('TracksConfigure:useEffect:cleanup')
-      if (tracks) {
+      if (tracks && tracks[0]) {
         // eslint-disable-next-line no-unused-expressions
         tracks[0]?.close()
-        // eslint-disable-next-line no-unused-expressions
-        tracks[1]?.close()
       }
+
+      if (localVideoTrack) {
+        // eslint-disable-next-line no-unused-expressions
+        localVideoTrack?.close()
+      }
+
       // if (environmentTrack) {
       //   // eslint-disable-next-line no-unused-expressions
       //   environmentTrack?.close()
