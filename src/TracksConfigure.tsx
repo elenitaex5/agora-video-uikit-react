@@ -44,6 +44,7 @@ const TracksConfigure: React.FC<
     const newTrack = isSwapped ? environmentTrack : tracks[1]
     mediaStore.current[0].videoTrack = newTrack
     setLocalVideoTrack(newTrack)
+    setIsSwapped((prev) => !prev)
   }
 
   useEffect(() => {
