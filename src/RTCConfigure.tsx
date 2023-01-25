@@ -335,12 +335,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
     if (callActive) {
       publish()
     }
-  }, [
-    callActive,
-    localVideoTrack?.enabled,
-    localAudioTrack?.enabled,
-    channelJoined
-  ])
+  }, [callActive, localVideoTrack, localAudioTrack?.enabled, channelJoined])
 
   useEffect(() => {
     console.log('LOGLOG! RTCConfigure:useEffect', localVideoTrack)
