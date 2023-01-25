@@ -30,6 +30,14 @@ const TracksConfigure: React.FC<
     useState<ILocalVideoTrack | null>(null)
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
+
+  const [videoTracks, setVideoTracks] = useState<{
+    user: ILocalVideoTrack | null
+    environment: ILocalVideoTrack | null
+  }>({
+    user: null,
+    environment: null
+  })
   const {
     ready: audioTrackReady,
     track: audioTrack,
@@ -49,15 +57,13 @@ const TracksConfigure: React.FC<
   const [currentTrackId, setCurrentTrackId] = useState<string | null>(null)
 
   const swapCamera = () => {
-    console.log(
-      'LOGLOG! TracksConfigure:swapCamera',
-      environmentTrack,
-      userTrack
-    )
-    if (!environmentTrack || !userTrack) return
+    console.log('LOGLOG! TracksConfigure:swapCamera', videoTracks)
+    if (!videoTracks.environment || !videoTracks.user) return
 
     const newTrack =
-      currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
+      currentTrackId === videoTracks.user.getTrackId()
+        ? videoTracks.environment
+        : videoTracks.user
     console.log('LOGLOG! TracksConfigure:swapCamera:newTrack', newTrack)
 
     mediaStore.current[0].videoTrack = newTrack
@@ -69,6 +75,11 @@ const TracksConfigure: React.FC<
       audioTrack,
       userTrack,
       environmentTrack
+    })
+
+    setVideoTracks({
+      user: userTrack,
+      environment: environmentTrack
     })
 
     if (audioTrack !== null && userTrack !== null) {
