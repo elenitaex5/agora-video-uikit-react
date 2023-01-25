@@ -57,25 +57,25 @@ const TracksConfigure: React.FC<
   const [currentTrackId, setCurrentTrackId] = useState<string | null>(null)
 
   const swapCamera = () => {
-    console.log('LOGLOG! TracksConfigure:swapCamera', videoTracks)
+    // console.log('LOGLOG! TracksConfigure:swapCamera', videoTracks)
     if (!videoTracks.environment || !videoTracks.user) return
 
     const newTrack =
       currentTrackId === videoTracks.user.getTrackId()
         ? videoTracks.environment
         : videoTracks.user
-    console.log('LOGLOG! TracksConfigure:swapCamera:newTrack', newTrack)
+    // console.log('LOGLOG! TracksConfigure:swapCamera:newTrack', newTrack)
 
     mediaStore.current[0].videoTrack = newTrack
     setLocalVideoTrack(newTrack)
   }
 
   useEffect(() => {
-    console.log('LOGLOG! TracksConfigure:useEffect', {
-      audioTrack,
-      userTrack,
-      environmentTrack
-    })
+    // console.log('LOGLOG! TracksConfigure:useEffect', {
+    //   audioTrack,
+    //   userTrack,
+    //   environmentTrack
+    // })
 
     setVideoTracks({
       user: userTrack,
@@ -98,7 +98,7 @@ const TracksConfigure: React.FC<
     }
 
     return () => {
-      console.log('LOGLOG! TracksConfigure:useEffect:cleanup')
+      // console.log('LOGLOG! TracksConfigure:useEffect:cleanup')
       if (audioTrack) audioTrack.close()
       if (environmentTrack) environmentTrack.close()
       if (userTrack) userTrack.close()
@@ -113,15 +113,15 @@ const TracksConfigure: React.FC<
   ]) //, ready])
 
   useEffect(() => {
-    console.log(
-      'LOGLOG! TracksConfigure:useEffect:localVideoTrack',
-      localVideoTrack
-    )
+    // console.log(
+    //   'LOGLOG! TracksConfigure:useEffect:localVideoTrack',
+    //   localVideoTrack
+    // )
     if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
   }, [localVideoTrack])
 
   useEffect(() => {
-    console.log('LOGLOG! TracksConfigure:useEffect:[swapCamera]')
+    // console.log('LOGLOG! TracksConfigure:useEffect:[swapCamera]')
     const interval = setInterval(() => {
       swapCamera()
     }, 5000)

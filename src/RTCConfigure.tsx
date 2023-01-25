@@ -334,10 +334,12 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
         localVideoTrackId: localVideoTrack?.getTrackId(),
         currentVideoTrackId,
         callActive,
-        localVideoTrackHasPublished
+        localVideoTrackHasPublished,
+        channelJoined
       })
       if (localVideoTrack?.enabled && channelJoined) {
         if (!localVideoTrackHasPublished) {
+          console.log('LOGLOG!! publish:publish', localVideoTrack)
           await client.publish([localVideoTrack]).then(() => {
             localVideoTrackHasPublished = true
             setCurrentVideoTrackId(localVideoTrack.getTrackId())
