@@ -46,6 +46,9 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
       console.log(reject)
     })
   )
+  const [currentVideoTrackId, setCurrentVideoTrackId] = useState<string | null>(
+    null
+  )
 
   let client = useClient()
   if (rtcProps.customRtcClient) {
@@ -310,7 +313,11 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
 
   // publish local stream
   useEffect(() => {
-    console.log('LOGLOG! RTCConfigure:useEffect:publish', localVideoTrack)
+    console.log(
+      'LOGLOG! RTCConfigure:useEffect:publish',
+      localVideoTrack,
+      callActive
+    )
     async function publish() {
       if (rtcProps.enableDualStream) {
         await client.enableDualStream()
@@ -323,10 +330,17 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
           })
         }
       }
+      console.log('LOGLOG!! publish', {
+        localVideoTrackId: localVideoTrack?.getTrackId(),
+        currentVideoTrackId,
+        callActive,
+        localVideoTrackHasPublished
+      })
       if (localVideoTrack?.enabled && channelJoined) {
         if (!localVideoTrackHasPublished) {
           await client.publish([localVideoTrack]).then(() => {
             localVideoTrackHasPublished = true
+            setCurrentVideoTrackId(localVideoTrack.getTrackId())
           })
         }
       }
