@@ -74,16 +74,16 @@ const TracksConfigure: React.FC<
     }
   }, [trackReady, error, environmentTrackReady, environmentError]) //, ready])
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log('TracksConfigure:useEffect:swapCamera')
-      swapCamera()
-    }, 5000)
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     console.log('TracksConfigure:useEffect:swapCamera')
+  //     swapCamera()
+  //   }, 5000)
 
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
+  //   return () => {
+  //     clearInterval(interval)
+  //   }
+  // }, [])
 
   return (
     <TracksProvider
