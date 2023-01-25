@@ -49,14 +49,19 @@ const TracksConfigure: React.FC<
   const [currentTrackId, setCurrentTrackId] = useState<string | null>(null)
 
   const swapCamera = () => {
+    console.log(
+      'LOGLOG! TracksConfigure:swapCamera',
+      environmentTrack,
+      userTrack
+    )
     if (!environmentTrack || !userTrack) return
 
     const newTrack =
       currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
+    console.log('LOGLOG! TracksConfigure:swapCamera:newTrack', newTrack)
 
     mediaStore.current[0].videoTrack = newTrack
     setLocalVideoTrack(newTrack)
-    setCurrentTrackId(newTrack.getTrackId())
   }
 
   useEffect(() => {
@@ -97,12 +102,15 @@ const TracksConfigure: React.FC<
   ]) //, ready])
 
   useEffect(() => {
+    console.log(
+      'LOGLOG! TracksConfigure:useEffect:localVideoTrack',
+      localVideoTrack
+    )
     if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
   }, [localVideoTrack])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log('LOGLOG! TracksConfigure:useEffect:swapCamera')
       swapCamera()
     }, 5000)
 
