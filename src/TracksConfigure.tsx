@@ -60,7 +60,7 @@ const TracksConfigure: React.FC<
   }
 
   useEffect(() => {
-    console.log('TracksConfigure:useEffect', {
+    console.log('LOGLOG! TracksConfigure:useEffect', {
       audioTrack,
       userTrack,
       environmentTrack
@@ -82,7 +82,7 @@ const TracksConfigure: React.FC<
     }
 
     return () => {
-      console.log('TracksConfigure:useEffect:cleanup')
+      console.log('LOGLOG! TracksConfigure:useEffect:cleanup')
       if (audioTrack) audioTrack.close()
       if (environmentTrack) environmentTrack.close()
       if (userTrack) userTrack.close()
@@ -102,7 +102,7 @@ const TracksConfigure: React.FC<
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log('TracksConfigure:useEffect:swapCamera')
+      console.log('LOGLOG! TracksConfigure:useEffect:swapCamera')
       swapCamera()
     }, 5000)
 
