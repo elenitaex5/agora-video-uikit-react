@@ -39,7 +39,6 @@ const TracksConfigure: React.FC<
 
   const swapCamera = () => {
     if (environmentTrack && mediaStore.current[0]) {
-      localVideoTrack?.close()
       mediaStore.current[0].videoTrack = environmentTrack
       setLocalVideoTrack(environmentTrack)
     }
@@ -60,17 +59,19 @@ const TracksConfigure: React.FC<
       console.error(error)
       setReady(false)
     }
+
     return () => {
+      console.log('TracksConfigure:useEffect:cleanup')
       if (tracks) {
         // eslint-disable-next-line no-unused-expressions
         tracks[0]?.close()
         // eslint-disable-next-line no-unused-expressions
         tracks[1]?.close()
       }
-      if (environmentTrack) {
-        // eslint-disable-next-line no-unused-expressions
-        environmentTrack?.close()
-      }
+      // if (environmentTrack) {
+      //   // eslint-disable-next-line no-unused-expressions
+      //   environmentTrack?.close()
+      // }
     }
   }, [trackReady, error, environmentTrackReady, environmentError]) //, ready])
 
