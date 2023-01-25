@@ -310,6 +310,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
 
   // publish local stream
   useEffect(() => {
+    console.log('!!!!!!! RTCConfigure:useEffect:publish', localVideoTrack)
     async function publish() {
       if (rtcProps.enableDualStream) {
         await client.enableDualStream()
@@ -340,6 +341,10 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
     localAudioTrack?.enabled,
     channelJoined
   ])
+
+  useEffect(() => {
+    console.log('!!!!!!!2 2 2 RTCConfigure:useEffect', localVideoTrack)
+  }, [localVideoTrack])
 
   // update local state if tracks are not null
   useEffect(() => {
