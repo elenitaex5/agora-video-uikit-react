@@ -121,6 +121,7 @@ const TracksConfigure: React.FC<
   }, [localVideoTrack])
 
   useEffect(() => {
+    console.log('LOGLOG! TracksConfigure:useEffect:[swapCamera]')
     const interval = setInterval(() => {
       swapCamera()
     }, 5000)
@@ -128,7 +129,7 @@ const TracksConfigure: React.FC<
     return () => {
       clearInterval(interval)
     }
-  }, [])
+  }, [swapCamera, videoTracks])
 
   return (
     <TracksProvider
