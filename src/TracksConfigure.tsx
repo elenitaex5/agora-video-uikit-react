@@ -3,16 +3,17 @@ import { RtcPropsInterface, mediaStore } from './PropsContext'
 import {
   ILocalVideoTrack,
   ILocalAudioTrack,
-  createMicrophoneAndCameraTracks,
-  createCameraVideoTrack
+  createCameraVideoTrack,
+  createMicrophoneAudioTrack
 } from 'agora-rtc-react'
 import { TracksProvider } from './TracksContext'
 
-const useTracks = createMicrophoneAndCameraTracks(
-  { encoderConfig: {} },
-  { encoderConfig: {} }
-)
+const useAudioTrack = createMicrophoneAudioTrack({ encoderConfig: {} })
 
+const useUserTrack = createCameraVideoTrack({
+  encoderConfig: {},
+  facingMode: 'user'
+})
 const useEnvironmentTrack = createCameraVideoTrack({
   encoderConfig: {},
   facingMode: 'environment'
@@ -29,58 +30,74 @@ const TracksConfigure: React.FC<
     useState<ILocalVideoTrack | null>(null)
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
-  const { ready: trackReady, tracks, error } = useTracks()
+  const {
+    ready: audioTrackReady,
+    track: audioTrack,
+    error: audioTrackError
+  } = useAudioTrack()
   const {
     ready: environmentTrackReady,
     track: environmentTrack,
-    error: environmentError
+    error: environmentTrackError
   } = useEnvironmentTrack()
+  const {
+    ready: userTrackReady,
+    track: userTrack,
+    error: userTrackError
+  } = useUserTrack()
   const mediaStore = useRef<mediaStore>({})
-  const [isSwapped, setIsSwapped] = useState<boolean>(false)
+  const [currentTrackId, setCurrentTrackId] = useState<string | null>(null)
 
   const swapCamera = () => {
-    if (!environmentTrack || !tracks || !tracks[1]) return
+    if (!environmentTrack || !userTrack) return
 
-    const newTrack = isSwapped ? environmentTrack : tracks[1]
+    const newTrack =
+      currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
+
     mediaStore.current[0].videoTrack = newTrack
     setLocalVideoTrack(newTrack)
-    setIsSwapped((prev) => !prev)
+    setCurrentTrackId(newTrack.getTrackId())
   }
 
   useEffect(() => {
-    console.log('TracksConfigure:useEffect', { tracks, environmentTrack })
+    console.log('TracksConfigure:useEffect', {
+      tracks: audioTrack,
+      environmentTrack
+    })
 
-    if (tracks !== null && environmentTrack !== null) {
-      setLocalAudioTrack(tracks[0])
-      setLocalVideoTrack(tracks[1])
+    if (audioTrack !== null && userTrack !== null) {
+      setLocalAudioTrack(audioTrack)
+      setLocalVideoTrack(userTrack)
+
       mediaStore.current[0] = {
-        audioTrack: tracks[0],
-        videoTrack: tracks[1]
+        audioTrack: audioTrack,
+        videoTrack: userTrack
       }
+
       setReady(true)
-    } else if (error) {
-      console.error(error)
+    } else if (audioTrackError) {
+      console.error(audioTrackError)
       setReady(false)
     }
 
     return () => {
       console.log('TracksConfigure:useEffect:cleanup')
-      if (tracks && tracks[0]) {
-        // eslint-disable-next-line no-unused-expressions
-        tracks[0]?.close()
-      }
-
-      if (localVideoTrack) {
-        // eslint-disable-next-line no-unused-expressions
-        localVideoTrack?.close()
-      }
-
-      // if (environmentTrack) {
-      //   // eslint-disable-next-line no-unused-expressions
-      //   environmentTrack?.close()
-      // }
+      if (audioTrack) audioTrack.close()
+      if (environmentTrack) environmentTrack.close()
+      if (userTrack) userTrack.close()
     }
-  }, [trackReady, error, environmentTrackReady, environmentError]) //, ready])
+  }, [
+    audioTrackReady,
+    audioTrackError,
+    environmentTrackReady,
+    environmentTrackError,
+    userTrackReady,
+    userTrackError
+  ]) //, ready])
+
+  useEffect(() => {
+    if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
+  }, [localVideoTrack])
 
   useEffect(() => {
     const interval = setInterval(() => {
