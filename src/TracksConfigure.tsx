@@ -61,7 +61,8 @@ const TracksConfigure: React.FC<
 
   useEffect(() => {
     console.log('TracksConfigure:useEffect', {
-      tracks: audioTrack,
+      audioTrack,
+      userTrack,
       environmentTrack
     })
 
