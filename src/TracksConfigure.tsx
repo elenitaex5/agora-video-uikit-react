@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, PropsWithChildren } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  PropsWithChildren,
+  useTransition
+} from 'react'
 import { RtcPropsInterface, mediaStore } from './PropsContext'
 import {
   ILocalVideoTrack,
@@ -97,6 +103,28 @@ const TracksConfigure: React.FC<
     userTrackReady,
     userTrackError
   ]) //, ready])
+
+  useEffect(() => {
+    console.log(
+      'LOGLOG! TracksConfigure:useEffect:[userTrack, environmentTrack]',
+      {
+        userTrack,
+        environmentTrack
+      }
+    )
+    if (userTrack && environmentTrack) {
+      // enumerate video devices
+      navigator.mediaDevices.enumerateDevices().then((devices) => {
+        const videoDevices = devices.filter(
+          (device) => device.kind === 'videoinput'
+        )
+        console.log(
+          'LOGLOG! TracksConfigure:useEffect:videoDevices',
+          videoDevices
+        )
+      })
+    }
+  }, [userTrack, environmentTrack])
 
   useEffect(() => {
     // console.log(
