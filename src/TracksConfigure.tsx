@@ -118,10 +118,9 @@ const TracksConfigure: React.FC<
         const videoDevices = devices.filter(
           (device) => device.kind === 'videoinput'
         )
-        console.log(
-          'LOGLOG! TracksConfigure:useEffect:videoDevices',
+        console.log('LOGLOG! TracksConfigure:useEffect:videoDevices', {
           videoDevices
-        )
+        })
       })
     }
   }, [userTrack, environmentTrack])
@@ -134,16 +133,16 @@ const TracksConfigure: React.FC<
     if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
   }, [localVideoTrack])
 
-  useEffect(() => {
-    // console.log('LOGLOG! TracksConfigure:useEffect:[swapCamera]')
-    const interval = setInterval(() => {
-      swapCamera()
-    }, 5000)
+  // useEffect(() => {
+  //   // console.log('LOGLOG! TracksConfigure:useEffect:[swapCamera]')
+  //   const interval = setInterval(() => {
+  //     swapCamera()
+  //   }, 5000)
 
-    return () => {
-      clearInterval(interval)
-    }
-  }, [swapCamera, videoTracks])
+  //   return () => {
+  //     clearInterval(interval)
+  //   }
+  // }, [swapCamera])
 
   return (
     <TracksProvider
