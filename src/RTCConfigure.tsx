@@ -325,14 +325,18 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
       if (currentVideoTrack && localVideoTrack) {
         console.log('LOGLOG!! publish function 2')
         alert(`unpublishing ${currentVideoTrack.getTrackId()}`)
-        await client.unpublish([currentVideoTrack])
+        try {
+          await client.unpublish([currentVideoTrack])
 
-        alert(`publishing ${localVideoTrack.getTrackId()}`)
-        await client.publish([localVideoTrack]).then(() => {
-          localVideoTrackHasPublished = true
-          setCurrentVideoTrack(localVideoTrack)
-          setCurrentVideoTrackId(localVideoTrack.getTrackId())
-        })
+          alert(`publishing ${localVideoTrack.getTrackId()}`)
+          await client.publish([localVideoTrack]).then(() => {
+            localVideoTrackHasPublished = true
+            setCurrentVideoTrack(localVideoTrack)
+            setCurrentVideoTrackId(localVideoTrack.getTrackId())
+          })
+        } catch (e) {
+          alert(JSON.stringify(e))
+        }
       } else {
         if (rtcProps.enableDualStream) {
           await client.enableDualStream()
@@ -381,17 +385,19 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
 
   // update local state if tracks are not null
   useEffect(() => {
+    alert('update local state?')
     if (localVideoTrack && localAudioTrack !== (null && undefined)) {
       mediaStore.current[0] = {
         audioTrack: localAudioTrack,
         videoTrack: localVideoTrack
       }
+      alert('update local state')
       dispatch({
         type: 'update-user-video',
         value: [localAudioTrack, localVideoTrack]
       })
     }
-  }, [rtcProps.channel, channelJoined])
+  }, [rtcProps.channel, channelJoined, localVideoTrack])
 
   // renew token if token is updated
   useEffect(() => {
