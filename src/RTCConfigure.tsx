@@ -326,7 +326,8 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
         console.log('LOGLOG!! publish function 2')
         try {
           console.log(`LOGLOG unpublishing ${currentVideoTrack.getTrackId()}`)
-          // await client.unpublish([currentVideoTrack])
+          console.log('LOGLOG localTracks', { localTracks: client.localTracks })
+          await client.unpublish([currentVideoTrack])
 
           console.log(`LOGLOG publishing ${localVideoTrack.getTrackId()}`)
           await client.publish([localVideoTrack]).then(() => {
