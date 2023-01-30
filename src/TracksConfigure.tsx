@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  PropsWithChildren,
-  useTransition
-} from 'react'
+import React, { useState, useEffect, useRef, PropsWithChildren } from 'react'
 import { RtcPropsInterface, mediaStore } from './PropsContext'
 import {
   ILocalVideoTrack,
