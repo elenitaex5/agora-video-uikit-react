@@ -14,7 +14,6 @@ function LocalControls() {
     showTimer = false,
     localBtnWrapper = {}
   } = styleProps || {}
-  console.log('estoy en local controls')
   return (
     <div
       style={{
