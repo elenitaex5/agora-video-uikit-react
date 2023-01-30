@@ -321,41 +321,50 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
       callActive
     )
     async function publish() {
-      console.log('LOGLOG!! publish function')
+      console.log('LOGLOG!! publish function 1')
+      if (currentVideoTrack && localVideoTrack) {
+        console.log('LOGLOG!! publish function 2')
+        alert(`unpublishing ${currentVideoTrack.getTrackId()}`)
+        await client.unpublish([currentVideoTrack])
 
-      if (rtcProps.enableDualStream) {
-        await client.enableDualStream()
-      }
-      // handle publish fail if track is not enabled
-      if (localAudioTrack?.enabled && channelJoined) {
-        if (!localAudioTrackHasPublished) {
-          await client.publish([localAudioTrack]).then(() => {
-            localAudioTrackHasPublished = true
-          })
+        alert(`publishing ${localVideoTrack.getTrackId()}`)
+        await client.publish([localVideoTrack]).then(() => {
+          localVideoTrackHasPublished = true
+          setCurrentVideoTrack(localVideoTrack)
+          setCurrentVideoTrackId(localVideoTrack.getTrackId())
+        })
+      } else {
+        if (rtcProps.enableDualStream) {
+          await client.enableDualStream()
         }
-      }
-      console.log('LOGLOG!! publish', {
-        localVideoTrackId: localVideoTrack?.getTrackId(),
-        currentVideoTrackId,
-        callActive,
-        localVideoTrackHasPublished,
-        channelJoined
-      })
-      if (localVideoTrack?.enabled && channelJoined) {
-        if (!localVideoTrackHasPublished) {
-          console.log('LOGLOG!! publish:publish', localVideoTrack)
-
-          if (currentVideoTrack) {
-            alert(`unpublishing ${currentVideoTrack.getTrackId()}`)
-            await client.unpublish([currentVideoTrack])
+        console.log('LOGLOG!! publish function 3')
+        // handle publish fail if track is not enabled
+        if (localAudioTrack?.enabled && channelJoined) {
+          if (!localAudioTrackHasPublished) {
+            await client.publish([localAudioTrack]).then(() => {
+              localAudioTrackHasPublished = true
+            })
           }
+        }
+        console.log('LOGLOG!! publish function 4')
+        console.log('LOGLOG!! publish', {
+          localVideoTrackId: localVideoTrack?.getTrackId(),
+          currentVideoTrackId,
+          callActive,
+          localVideoTrackHasPublished,
+          channelJoined
+        })
+        if (localVideoTrack?.enabled && channelJoined) {
+          if (!localVideoTrackHasPublished) {
+            console.log('LOGLOG!! publish:publish', localVideoTrack)
 
-          alert(`publishing ${localVideoTrack.getTrackId()}`)
-          await client.publish([localVideoTrack]).then(() => {
-            localVideoTrackHasPublished = true
-            setCurrentVideoTrack(localVideoTrack)
-            setCurrentVideoTrackId(localVideoTrack.getTrackId())
-          })
+            alert(`publishing ${localVideoTrack.getTrackId()}`)
+            await client.publish([localVideoTrack]).then(() => {
+              localVideoTrackHasPublished = true
+              setCurrentVideoTrack(localVideoTrack)
+              setCurrentVideoTrackId(localVideoTrack.getTrackId())
+            })
+          }
         }
       }
     }
