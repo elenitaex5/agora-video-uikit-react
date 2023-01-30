@@ -46,8 +46,6 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
       console.log(reject)
     })
   )
-  const [currentVideoTrack, setCurrentVideoTrack] =
-    useState<ILocalVideoTrack | null>(null)
 
   let client = useClient()
   if (rtcProps.customRtcClient) {
@@ -327,7 +325,6 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
 
         await client.publish([localVideoTrack]).then(() => {
           localVideoTrackHasPublished = true
-          setCurrentVideoTrack(localVideoTrack)
         })
       }
 
@@ -351,7 +348,6 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
           alert(`publishing ${localVideoTrack.getTrackId()}`)
           await client.publish([localVideoTrack]).then(() => {
             localVideoTrackHasPublished = true
-            setCurrentVideoTrack(localVideoTrack)
           })
         }
       }
