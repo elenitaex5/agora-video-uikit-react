@@ -310,45 +310,37 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
 
   // publish local stream
   useEffect(() => {
-    console.log(
-      'LOGLOG! RTCConfigure:useEffect:publish',
-      localVideoTrack,
-      callActive
-    )
     async function publish() {
       const publishedVideoTrack = client.localTracks.find(
         (lt) => lt.trackMediaType === 'video'
       )
-      console.log('LOGLOG', { publishedVideoTrack })
-      if (localVideoTrack && publishedVideoTrack) {
+
+      if (localVideoTrack?.enabled && publishedVideoTrack) {
         await client.unpublish([publishedVideoTrack])
 
         await client.publish([localVideoTrack]).then(() => {
           localVideoTrackHasPublished = true
         })
-      }
-
-      if (rtcProps.enableDualStream) {
-        await client.enableDualStream()
-      }
-
-      // handle publish fail if track is not enabled
-      if (localAudioTrack?.enabled && channelJoined) {
-        if (!localAudioTrackHasPublished) {
-          await client.publish([localAudioTrack]).then(() => {
-            localAudioTrackHasPublished = true
-          })
+      } else {
+        if (rtcProps.enableDualStream) {
+          await client.enableDualStream()
         }
-      }
 
-      if (localVideoTrack?.enabled && channelJoined) {
-        if (!localVideoTrackHasPublished) {
-          console.log('LOGLOG!! publish:publish', localVideoTrack)
+        // handle publish fail if track is not enabled
+        if (localAudioTrack?.enabled && channelJoined) {
+          if (!localAudioTrackHasPublished) {
+            await client.publish([localAudioTrack]).then(() => {
+              localAudioTrackHasPublished = true
+            })
+          }
+        }
 
-          console.log(`publishing ${localVideoTrack.getTrackId()}`)
-          await client.publish([localVideoTrack]).then(() => {
-            localVideoTrackHasPublished = true
-          })
+        if (localVideoTrack?.enabled && channelJoined) {
+          if (!localVideoTrackHasPublished) {
+            await client.publish([localVideoTrack]).then(() => {
+              localVideoTrackHasPublished = true
+            })
+          }
         }
       }
     }
@@ -360,13 +352,12 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
 
   // update local state if tracks are not null
   useEffect(() => {
-    console.log('update local state?')
     if (localVideoTrack && localAudioTrack !== (null && undefined)) {
       mediaStore.current[0] = {
         audioTrack: localAudioTrack,
         videoTrack: localVideoTrack
       }
-      console.log('update local state')
+
       dispatch({
         type: 'update-user-video',
         value: [localAudioTrack, localVideoTrack]

@@ -57,24 +57,11 @@ const TracksConfigure: React.FC<
 
   const swapCamera = () => {
     setReady(false)
-    // console.log('LOGLOG! TracksConfigure:swapCamera', videoTracks)
-    console.log('LOGLOG! TracksConfigure:swapCamera', {
-      environmentTrack,
-      userTrack,
-      currentTrackId
-    })
-
-    // alert(`Env? ${environmentTrack === null}. User? ${userTrack === null}`)
-    // alert(
-    //   `Current track ${currentTrackId}. User track ${userTrack?.getTrackId()}. Environment track ${environmentTrack?.getTrackId()}`
-    // )
 
     if (!environmentTrack || !userTrack) return
-    console.log('LOGLOG! TracksConfigure:swapCamera:continue')
 
     const newTrack =
       currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
-    console.log('LOGLOG! TracksConfigure:swapCamera:newTrack', newTrack)
 
     // alert(`New track ${newTrack.getTrackId()}`)
     mediaStore.current[0].videoTrack = newTrack
@@ -83,12 +70,6 @@ const TracksConfigure: React.FC<
   }
 
   useEffect(() => {
-    // console.log('LOGLOG! TracksConfigure:useEffect', {
-    //   audioTrack,
-    //   userTrack,
-    //   environmentTrack
-    // })
-
     if (audioTrack !== null && userTrack !== null) {
       setLocalAudioTrack(audioTrack)
       setLocalVideoTrack(userTrack)
@@ -105,11 +86,6 @@ const TracksConfigure: React.FC<
     }
 
     return () => {
-      console.log('LOGLOG! TracksConfigure:useEffect:cleanup', {
-        audioTrack,
-        userTrack,
-        environmentTrack
-      })
       if (audioTrack) audioTrack.close()
       if (environmentTrack) environmentTrack.close()
       if (userTrack) userTrack.close()
@@ -124,23 +100,8 @@ const TracksConfigure: React.FC<
   ]) //, ready])
 
   useEffect(() => {
-    // console.log(
-    //   'LOGLOG! TracksConfigure:useEffect:localVideoTrack',
-    //   localVideoTrack
-    // )
     if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
   }, [localVideoTrack])
-
-  // useEffect(() => {
-  //   // console.log('LOGLOG! TracksConfigure:useEffect:[swapCamera]')
-  //   const interval = setInterval(() => {
-  //     swapCamera()
-  //   }, 5000)
-
-  //   return () => {
-  //     clearInterval(interval)
-  //   }
-  // }, [swapCamera])
 
   return (
     <TracksProvider
@@ -155,7 +116,6 @@ const TracksConfigure: React.FC<
           padding: '1rem 0'
         }}
         onClick={() => {
-          console.log('LOGLOG! TracksConfigure:swapCamera:click')
           swapCamera()
         }}
       >
