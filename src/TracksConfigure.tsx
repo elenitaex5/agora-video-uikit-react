@@ -62,7 +62,7 @@ const TracksConfigure: React.FC<
 
     const newTrack =
       currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
-
+    console.log('LOGLOG', { newTrack })
     // alert(`New track ${newTrack.getTrackId()}`)
     mediaStore.current[0].videoTrack = newTrack
     setLocalVideoTrack(newTrack)
