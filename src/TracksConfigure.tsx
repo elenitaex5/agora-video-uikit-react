@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useRef,
   PropsWithChildren,
-  useCallback,
   useMemo
 } from 'react'
 import { RtcPropsInterface, mediaStore } from './PropsContext'
