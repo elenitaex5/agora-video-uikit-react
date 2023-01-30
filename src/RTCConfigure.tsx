@@ -345,7 +345,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
         if (!localVideoTrackHasPublished) {
           console.log('LOGLOG!! publish:publish', localVideoTrack)
 
-          alert(`publishing ${localVideoTrack.getTrackId()}`)
+          console.log(`publishing ${localVideoTrack.getTrackId()}`)
           await client.publish([localVideoTrack]).then(() => {
             localVideoTrackHasPublished = true
           })
@@ -360,13 +360,13 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
 
   // update local state if tracks are not null
   useEffect(() => {
-    alert('update local state?')
+    console.log('update local state?')
     if (localVideoTrack && localAudioTrack !== (null && undefined)) {
       mediaStore.current[0] = {
         audioTrack: localAudioTrack,
         videoTrack: localVideoTrack
       }
-      alert('update local state')
+      console.log('update local state')
       dispatch({
         type: 'update-user-video',
         value: [localAudioTrack, localVideoTrack]
