@@ -324,18 +324,17 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
       console.log('LOGLOG!! publish function 1')
       if (currentVideoTrack && localVideoTrack) {
         console.log('LOGLOG!! publish function 2')
-        alert(`unpublishing ${currentVideoTrack.getTrackId()}`)
+        console.log(`LOGLOG unpublishing ${currentVideoTrack.getTrackId()}`)
         try {
           await client.unpublish([currentVideoTrack])
 
-          alert(`publishing ${localVideoTrack.getTrackId()}`)
+          console.log(`LOGLOG publishing ${localVideoTrack.getTrackId()}`)
           await client.publish([localVideoTrack]).then(() => {
-            localVideoTrackHasPublished = true
             setCurrentVideoTrack(localVideoTrack)
             setCurrentVideoTrackId(localVideoTrack.getTrackId())
           })
         } catch (e) {
-          alert(JSON.stringify(e))
+          console.error('LOGLOG', e)
         }
       } else {
         if (rtcProps.enableDualStream) {
@@ -350,6 +349,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
             })
           }
         }
+
         console.log('LOGLOG!! publish function 4')
         console.log('LOGLOG!! publish', {
           localVideoTrackId: localVideoTrack?.getTrackId(),
@@ -358,11 +358,12 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
           localVideoTrackHasPublished,
           channelJoined
         })
+
         if (localVideoTrack?.enabled && channelJoined) {
           if (!localVideoTrackHasPublished) {
             console.log('LOGLOG!! publish:publish', localVideoTrack)
 
-            alert(`publishing ${localVideoTrack.getTrackId()}`)
+            console.log(`LOGLOG publishing ${localVideoTrack.getTrackId()}`)
             await client.publish([localVideoTrack]).then(() => {
               localVideoTrackHasPublished = true
               setCurrentVideoTrack(localVideoTrack)
@@ -385,13 +386,13 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
 
   // update local state if tracks are not null
   useEffect(() => {
-    alert('update local state?')
+    console.log('update local state?')
     if (localVideoTrack && localAudioTrack !== (null && undefined)) {
       mediaStore.current[0] = {
         audioTrack: localAudioTrack,
         videoTrack: localVideoTrack
       }
-      alert('update local state')
+      console.log('update local state')
       dispatch({
         type: 'update-user-video',
         value: [localAudioTrack, localVideoTrack]
