@@ -81,13 +81,13 @@ const TracksConfigure: React.FC<
     //   environmentTrack
     // })
 
-    if (audioTrack !== null && environmentTrack !== null) {
+    if (audioTrack !== null && userTrack !== null) {
       setLocalAudioTrack(audioTrack)
-      setLocalVideoTrack(environmentTrack)
+      setLocalVideoTrack(userTrack)
 
       mediaStore.current[0] = {
         audioTrack: audioTrack,
-        videoTrack: environmentTrack
+        videoTrack: userTrack
       }
 
       setReady(true)
