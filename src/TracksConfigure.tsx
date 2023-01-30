@@ -56,6 +56,7 @@ const TracksConfigure: React.FC<
   const [currentTrackId, setCurrentTrackId] = useState<string | null>(null)
 
   const swapCamera = () => {
+    setReady(false)
     // console.log('LOGLOG! TracksConfigure:swapCamera', videoTracks)
     console.log('LOGLOG! TracksConfigure:swapCamera', {
       environmentTrack,
@@ -78,6 +79,7 @@ const TracksConfigure: React.FC<
     // alert(`New track ${newTrack.getTrackId()}`)
     mediaStore.current[0].videoTrack = newTrack
     setLocalVideoTrack(newTrack)
+    setReady(true)
   }
 
   useEffect(() => {
@@ -87,13 +89,13 @@ const TracksConfigure: React.FC<
     //   environmentTrack
     // })
 
-    if (audioTrack !== null && environmentTrack !== null) {
+    if (audioTrack !== null && userTrack !== null) {
       setLocalAudioTrack(audioTrack)
-      setLocalVideoTrack(environmentTrack)
+      setLocalVideoTrack(userTrack)
 
       mediaStore.current[0] = {
         audioTrack: audioTrack,
-        videoTrack: environmentTrack
+        videoTrack: userTrack
       }
 
       setReady(true)
@@ -103,7 +105,11 @@ const TracksConfigure: React.FC<
     }
 
     return () => {
-      // console.log('LOGLOG! TracksConfigure:useEffect:cleanup')
+      console.log('LOGLOG! TracksConfigure:useEffect:cleanup', {
+        audioTrack,
+        userTrack,
+        environmentTrack
+      })
       if (audioTrack) audioTrack.close()
       if (environmentTrack) environmentTrack.close()
       if (userTrack) userTrack.close()
