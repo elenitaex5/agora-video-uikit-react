@@ -1,6 +1,13 @@
-import React, { useState, useEffect, useRef, PropsWithChildren } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  PropsWithChildren,
+  useCallback,
+  useMemo
+} from 'react'
 import { RtcPropsInterface, mediaStore } from './PropsContext'
-import {
+import AgoraRTC, {
   ILocalVideoTrack,
   ILocalAudioTrack,
   createCameraVideoTrack,
@@ -16,15 +23,6 @@ const useAudioTrack = createMicrophoneAudioTrack({ encoderConfig: {} })
 // id: '118143a1-ae7f-4ed5-a709-6209ea7c0eaa',
 // label: 'camera2 0, facing back'
 
-const useUserTrack = createCameraVideoTrack({
-  encoderConfig: {},
-  facingMode: 'user'
-})
-const useEnvironmentTrack = createCameraVideoTrack({
-  encoderConfig: {},
-  facingMode: 'environment'
-})
-
 /**
  * React component that create local camera and microphone tracks and assigns them to the child components
  */
@@ -36,6 +34,23 @@ const TracksConfigure: React.FC<
     useState<ILocalVideoTrack | null>(null)
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
+
+  const useUserTrack = useMemo(
+    () =>
+      createCameraVideoTrack({
+        encoderConfig: {},
+        facingMode: 'user'
+      }),
+    []
+  )
+  const useEnvironmentTrack = useMemo(
+    () =>
+      createCameraVideoTrack({
+        encoderConfig: {},
+        facingMode: 'environment'
+      }),
+    []
+  )
 
   const {
     ready: audioTrackReady,
@@ -102,6 +117,12 @@ const TracksConfigure: React.FC<
   useEffect(() => {
     if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
   }, [localVideoTrack])
+
+  useEffect(() => {
+    AgoraRTC.getCameras().then((cameras) => {
+      console.log('LOGLOG cameras', { cameras })
+    })
+  }, [])
 
   return (
     <TracksProvider
