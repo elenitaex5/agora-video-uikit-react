@@ -57,12 +57,13 @@ const TracksConfigure: React.FC<
       currentTrackId
     })
     if (!environmentTrack || !userTrack) return
+    console.log('LOGLOG! TracksConfigure:swapCamera:continue')
 
     const newTrack =
       currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
-    // console.log('LOGLOG! TracksConfigure:swapCamera:newTrack', newTrack)
+    console.log('LOGLOG! TracksConfigure:swapCamera:newTrack', newTrack)
 
-    alert(JSON.stringify(newTrack))
+    // alert(JSON.stringify(newTrack))
     mediaStore.current[0].videoTrack = newTrack
     setLocalVideoTrack(newTrack)
   }
