@@ -321,6 +321,8 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
       callActive
     )
     async function publish() {
+      console.log('LOGLOG!! publish function')
+
       if (rtcProps.enableDualStream) {
         await client.enableDualStream()
       }
@@ -357,8 +359,9 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
         }
       }
     }
-    console.log('Publish', localVideoTrack, localAudioTrack, callActive)
+    console.log('LOGLOG Publish', localVideoTrack, localAudioTrack, callActive)
     if (callActive) {
+      console.log('LOGLOG Calling Publish')
       publish()
     }
   }, [callActive, localVideoTrack, localAudioTrack?.enabled, channelJoined])

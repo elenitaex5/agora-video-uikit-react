@@ -57,10 +57,10 @@ const TracksConfigure: React.FC<
       currentTrackId
     })
 
-    alert(`Env? ${environmentTrack === null}. User? ${userTrack === null}`)
-    alert(
-      `Current track ${currentTrackId}. User track ${userTrack?.getTrackId()}. Environment track ${environmentTrack?.getTrackId()}`
-    )
+    // alert(`Env? ${environmentTrack === null}. User? ${userTrack === null}`)
+    // alert(
+    //   `Current track ${currentTrackId}. User track ${userTrack?.getTrackId()}. Environment track ${environmentTrack?.getTrackId()}`
+    // )
 
     if (!environmentTrack || !userTrack) return
     console.log('LOGLOG! TracksConfigure:swapCamera:continue')
@@ -69,7 +69,7 @@ const TracksConfigure: React.FC<
       currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
     console.log('LOGLOG! TracksConfigure:swapCamera:newTrack', newTrack)
 
-    alert(`New track ${newTrack.getTrackId()}`)
+    // alert(`New track ${newTrack.getTrackId()}`)
     mediaStore.current[0].videoTrack = newTrack
     setLocalVideoTrack(newTrack)
   }
