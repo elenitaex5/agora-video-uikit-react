@@ -324,9 +324,9 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
       console.log('LOGLOG!! publish function 1')
       if (currentVideoTrack && localVideoTrack) {
         console.log('LOGLOG!! publish function 2')
-        console.log(`LOGLOG unpublishing ${currentVideoTrack.getTrackId()}`)
         try {
-          await client.unpublish([currentVideoTrack])
+          console.log(`LOGLOG unpublishing ${currentVideoTrack.getTrackId()}`)
+          // await client.unpublish([currentVideoTrack])
 
           console.log(`LOGLOG publishing ${localVideoTrack.getTrackId()}`)
           await client.publish([localVideoTrack]).then(() => {

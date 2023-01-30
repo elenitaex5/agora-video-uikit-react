@@ -10,6 +10,12 @@ import { TracksProvider } from './TracksContext'
 
 const useAudioTrack = createMicrophoneAudioTrack({ encoderConfig: {} })
 
+// id: 'cb74589a-ca89-4f40-801c-4cccc943f6b2'
+// label: 'camera2 1, facing front'
+
+// id: '118143a1-ae7f-4ed5-a709-6209ea7c0eaa',
+// label: 'camera2 0, facing back'
+
 const useUserTrack = createCameraVideoTrack({
   encoderConfig: {},
   facingMode: 'user'
