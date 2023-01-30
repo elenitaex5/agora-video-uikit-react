@@ -57,6 +57,7 @@ const TracksConfigure: React.FC<
       currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
     // console.log('LOGLOG! TracksConfigure:swapCamera:newTrack', newTrack)
 
+    alert(JSON.stringify(newTrack))
     mediaStore.current[0].videoTrack = newTrack
     setLocalVideoTrack(newTrack)
   }
@@ -127,16 +128,16 @@ const TracksConfigure: React.FC<
     if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
   }, [localVideoTrack])
 
-  // useEffect(() => {
-  //   // console.log('LOGLOG! TracksConfigure:useEffect:[swapCamera]')
-  //   const interval = setInterval(() => {
-  //     swapCamera()
-  //   }, 5000)
+  useEffect(() => {
+    // console.log('LOGLOG! TracksConfigure:useEffect:[swapCamera]')
+    const interval = setInterval(() => {
+      swapCamera()
+    }, 5000)
 
-  //   return () => {
-  //     clearInterval(interval)
-  //   }
-  // }, [swapCamera])
+    return () => {
+      clearInterval(interval)
+    }
+  }, [swapCamera])
 
   return (
     <TracksProvider
@@ -146,6 +147,7 @@ const TracksConfigure: React.FC<
         swapCamera
       }}
     >
+      <button onClick={swapCamera}>SWAP CAMERA</button>
       {ready ? props.children : null}
     </TracksProvider>
   )
