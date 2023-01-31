@@ -3,7 +3,8 @@ import { RtcPropsInterface, mediaStore } from './PropsContext'
 import {
   ILocalVideoTrack,
   ILocalAudioTrack,
-  createMicrophoneAndCameraTracks
+  createMicrophoneAndCameraTracks,
+  createCameraVideoTrack
 } from 'agora-rtc-react'
 import { TracksProvider } from './TracksContext'
 
@@ -11,6 +12,11 @@ const useTrack = createMicrophoneAndCameraTracks(
   { encoderConfig: {} },
   { encoderConfig: {} }
 )
+
+const useEnvironmentTrack = createCameraVideoTrack({
+  encoderConfig: {},
+  facingMode: 'environment'
+})
 
 /**
  * React component that create local camera and microphone tracks and assigns them to the child components
@@ -25,7 +31,21 @@ const TracksConfigure: React.FC<
     useState<ILocalAudioTrack | null>(null)
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user')
   const { ready: trackReady, tracks, error } = useTrack()
+  const {
+    ready: environmentReady,
+    track: environmentTrack,
+    error: environmentError
+  } = useEnvironmentTrack()
   const mediaStore = useRef<mediaStore>({})
+
+  const switchTrack = () => {
+    if (!tracks) return
+    setReady(false)
+
+    setLocalVideoTrack(facingMode === 'user' ? environmentTrack : tracks[1])
+
+    setReady(true)
+  }
 
   useEffect(() => {
     if (tracks !== null) {
@@ -50,6 +70,8 @@ const TracksConfigure: React.FC<
     }
   }, [trackReady, error]) //, ready])
 
+  if (!ready) return null
+
   return (
     <TracksProvider
       value={{
@@ -58,9 +80,7 @@ const TracksConfigure: React.FC<
       }}
     >
       <button
-        onClick={() => {
-          setFacingMode(facingMode === 'user' ? 'environment' : 'user')
-        }}
+        onClick={switchTrack}
         style={{
           width: '100%',
           padding: '1rem 0'
