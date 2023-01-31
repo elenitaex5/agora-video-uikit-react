@@ -3,10 +3,14 @@ import { RtcPropsInterface, mediaStore } from './PropsContext'
 import {
   ILocalVideoTrack,
   ILocalAudioTrack,
-  createMicrophoneAudioTrack,
-  createCameraVideoTrack
+  createMicrophoneAndCameraTracks
 } from 'agora-rtc-react'
 import { TracksProvider } from './TracksContext'
+
+const useTrack = createMicrophoneAndCameraTracks(
+  { encoderConfig: {} },
+  { encoderConfig: {} }
+)
 
 /**
  * React component that create local camera and microphone tracks and assigns them to the child components
@@ -20,56 +24,31 @@ const TracksConfigure: React.FC<
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user')
-  const {
-    ready: audioTrackReady,
-    track: audioTrack,
-    error: audioTrackError
-  } = createMicrophoneAudioTrack({ encoderConfig: {} })()
-  const {
-    ready: videoTrackReady,
-    track: videoTrack,
-    error: videoTrackError
-  } = createCameraVideoTrack({ encoderConfig: {} })()
-
-  const tracks = { audioTrack, videoTrack }
-
+  const { ready: trackReady, tracks, error } = useTrack()
   const mediaStore = useRef<mediaStore>({})
 
   useEffect(() => {
-    console.log('LOGLOG useEffect:[tracks, trackReady, error]', {
-      tracks,
-      trackReady: audioTrackReady,
-      error: audioTrackError
-    })
-
-    if (tracks?.audioTrack && tracks?.videoTrack) {
-      setLocalAudioTrack(tracks.audioTrack)
-      setLocalVideoTrack(tracks.videoTrack)
+    if (tracks !== null) {
+      setLocalAudioTrack(tracks[0])
+      setLocalVideoTrack(tracks[1])
       mediaStore.current[0] = {
-        audioTrack: tracks.audioTrack,
-        videoTrack: tracks.videoTrack
+        audioTrack: tracks[0],
+        videoTrack: tracks[1]
       }
       setReady(true)
-    } else if (audioTrackError) {
-      console.error(audioTrackError)
+    } else if (error) {
+      console.error(error)
       setReady(false)
     }
-
     return () => {
-      console.log('LOGLOG useEffect:[tracks, trackReady, error] cleanup')
-
       if (tracks) {
-        tracks.audioTrack?.close()
-        tracks.videoTrack?.close()
+        // eslint-disable-next-line no-unused-expressions
+        tracks[0]?.close()
+        // eslint-disable-next-line no-unused-expressions
+        tracks[1]?.close()
       }
     }
-  }, [
-    audioTrackReady,
-    videoTrackReady,
-    tracks,
-    audioTrackError,
-    videoTrackError
-  ]) //, ready])
+  }, [trackReady, error]) //, ready])
 
   return (
     <TracksProvider
