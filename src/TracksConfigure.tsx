@@ -53,10 +53,10 @@ const TracksConfigure: React.FC<
     track: ICameraVideoTrack | null
     error: AgoraRTCError | null
     facingMode: 'user' | 'environment'
-  }>({
+  }>(() => ({
     ...useUserTrack(),
     facingMode: 'user'
-  })
+  }))
 
   const swapCamera = () => {
     console.log('LOGLOG swapCamera', { localVideoTrack, videoTrack })
