@@ -24,7 +24,7 @@ const TracksConfigure: React.FC<
     useState<ILocalVideoTrack | null>(null)
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
-  const [facingMode, _] = useState<'user' | 'environment'>('user')
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user')
   const {
     ready: trackReady,
     tracks,
@@ -68,6 +68,17 @@ const TracksConfigure: React.FC<
         localAudioTrack: localAudioTrack
       }}
     >
+      <button
+        onClick={() => {
+          setFacingMode(facingMode === 'user' ? 'environment' : 'user')
+        }}
+        style={{
+          width: '100%',
+          padding: '1rem 0'
+        }}
+      >
+        Swap
+      </button>
       {ready ? props.children : null}
     </TracksProvider>
   )
