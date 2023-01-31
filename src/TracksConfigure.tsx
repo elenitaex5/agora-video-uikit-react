@@ -16,6 +16,16 @@ import { TracksProvider } from './TracksContext'
 
 const useAudioTrack = createMicrophoneAudioTrack({ encoderConfig: {} })
 
+const useUserTrack = createCameraVideoTrack({
+  encoderConfig: {},
+  facingMode: 'user'
+})
+
+const useEnvironmentTrack = createCameraVideoTrack({
+  encoderConfig: {},
+  facingMode: 'environment'
+})
+
 // id: 'cb74589a-ca89-4f40-801c-4cccc943f6b2'
 // label: 'camera2 1, facing front'
 
@@ -34,21 +44,6 @@ const TracksConfigure: React.FC<
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
 
-  const useUserTrack = useMemo(() => {
-    console.log('LOGLOG memo user')
-    return createCameraVideoTrack({
-      encoderConfig: {},
-      facingMode: 'user'
-    })
-  }, [])
-  const useEnvironmentTrack = useMemo(() => {
-    console.log('LOGLOG memo environment')
-    return createCameraVideoTrack({
-      encoderConfig: {},
-      facingMode: 'environment'
-    })
-  }, [])
-
   const {
     ready: audioTrackReady,
     track: audioTrack,
@@ -64,22 +59,19 @@ const TracksConfigure: React.FC<
     track: userTrack,
     error: userTrackError
   } = useUserTrack()
-  const mediaStore = useRef<mediaStore>({})
-  const [_, setCurrentTrackId] = useState<string | null>(null)
+
+  // const mediaStore = useRef<mediaStore>({})
+  const [currentTrackId, setCurrentTrackId] = useState<string | null>(null)
 
   const swapCamera = () => {
-    setReady(false)
-
     if (!environmentTrack || !userTrack) return
 
-    // const newTrack =
-    //   currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
-    const newTrack = userTrack
-    console.log('LOGLOG', { newTrack })
+    const newTrack =
+      currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
+
+    console.log('LOGLOG swap', { environmentTrack, userTrack, newTrack })
     // alert(`New track ${newTrack.getTrackId()}`)
-    mediaStore.current[0].videoTrack = newTrack
     setLocalVideoTrack(newTrack)
-    setReady(true)
   }
 
   useEffect(() => {
@@ -95,24 +87,13 @@ const TracksConfigure: React.FC<
     })
 
     if (audioTrack !== null && userTrack !== null) {
-      console.log('LOGLOG audioStreamTrack', {
-        audioStreamTrack: userTrack.getMediaStreamTrack(),
-        audioStreamTrackProp: (userTrack as any)._mediaStreamTrack,
-        originMediaStreamTrack: (userTrack as any)._originMediaStreamTrack
-      })
-
-      // eslint-disable-next-line dot-notation
-      userTrack['_originMediaStreamTrack'] = (
-        userTrack as any
-      )._mediaStreamTrack
-
       setLocalAudioTrack(audioTrack)
       setLocalVideoTrack(userTrack)
 
-      mediaStore.current[0] = {
-        audioTrack: audioTrack,
-        videoTrack: userTrack
-      }
+      // mediaStore.current[0] = {
+      //   audioTrack: audioTrack,
+      //   videoTrack: userTrack
+      // }
 
       setReady(true)
     } else if (audioTrackError || userTrackError || environmentTrackError) {

@@ -359,7 +359,15 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
 
   // update local state if tracks are not null
   useEffect(() => {
-    if (localVideoTrack && localAudioTrack !== (null && undefined)) {
+    console.log(
+      'LOGLOG useEffect:[rtcProps.channel, channelJoined, localVideoTrack]',
+      {
+        localVideoTrack,
+        localAudioTrack
+      }
+    )
+
+    if (localVideoTrack && localAudioTrack) {
       mediaStore.current[0] = {
         audioTrack: localAudioTrack,
         videoTrack: localVideoTrack
