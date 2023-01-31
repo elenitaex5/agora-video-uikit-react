@@ -1,11 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  PropsWithChildren,
-  useMemo
-} from 'react'
-import { RtcPropsInterface, mediaStore } from './PropsContext'
+import React, { useState, useEffect, PropsWithChildren } from 'react'
+import { RtcPropsInterface } from './PropsContext'
 import {
   ILocalVideoTrack,
   ILocalAudioTrack,
