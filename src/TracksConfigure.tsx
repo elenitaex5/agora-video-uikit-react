@@ -1,22 +1,18 @@
-import React, { useState, useEffect, useRef, PropsWithChildren } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  PropsWithChildren,
+  useMemo
+} from 'react'
 import { RtcPropsInterface, mediaStore } from './PropsContext'
-import {
+import AgoraRTC, {
   ILocalVideoTrack,
   ILocalAudioTrack,
   createCameraVideoTrack,
   createMicrophoneAudioTrack
 } from 'agora-rtc-react'
 import { TracksProvider } from './TracksContext'
-
-const useUserTrack = createCameraVideoTrack({
-  encoderConfig: {},
-  facingMode: 'user'
-})
-
-const useEnvironmentTrack = createCameraVideoTrack({
-  encoderConfig: {},
-  facingMode: 'environment'
-})
 
 const useAudioTrack = createMicrophoneAudioTrack({ encoderConfig: {} })
 
@@ -38,70 +34,115 @@ const TracksConfigure: React.FC<
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
 
+  const useUserTrack = useMemo(() => {
+    console.log('LOGLOG memo user')
+    return createCameraVideoTrack({
+      encoderConfig: {},
+      facingMode: 'user'
+    })
+  }, [])
+  const useEnvironmentTrack = useMemo(() => {
+    console.log('LOGLOG memo environment')
+    return createCameraVideoTrack({
+      encoderConfig: {},
+      facingMode: 'environment'
+    })
+  }, [])
+
   const {
     ready: audioTrackReady,
     track: audioTrack,
     error: audioTrackError
   } = useAudioTrack()
-
+  const {
+    ready: environmentTrackReady,
+    track: environmentTrack,
+    error: environmentTrackError
+  } = useEnvironmentTrack()
+  const {
+    ready: userTrackReady,
+    track: userTrack,
+    error: userTrackError
+  } = useUserTrack()
   const mediaStore = useRef<mediaStore>({})
-  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user')
-  const [videoTrack, setVideoTrack] = useState(() => useUserTrack())
+  const [currentTrackId, setCurrentTrackId] = useState<string | null>(null)
 
   const swapCamera = () => {
-    console.log('LOGLOG swapCamera', { localVideoTrack, videoTrack })
+    setReady(false)
 
-    if (facingMode === 'user') {
-      setVideoTrack(useEnvironmentTrack())
-      setFacingMode('environment')
-    } else {
-      setVideoTrack(useUserTrack())
-    }
+    if (!environmentTrack || !userTrack) return
 
-    // mediaStore.current[0].videoTrack = newTrack
-    // setLocalVideoTrack(newTrack)
+    const newTrack =
+      currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
+    console.log('LOGLOG', { newTrack })
+    // alert(`New track ${newTrack.getTrackId()}`)
+    mediaStore.current[0].videoTrack = newTrack
+    setLocalVideoTrack(newTrack)
+    setReady(true)
   }
 
   useEffect(() => {
-    console.log(
-      'LOGLOG useEffect:[audioTrackReady, audioTrackError, videoTrack]',
-      {
-        videoTrack,
-        facingMode
+    console.log('LOGLOG environment', {
+      environmentTrackReady,
+      environmentTrack,
+      environmentTrackError
+    })
+    console.log('LOGLOG user', {
+      userTrackReady,
+      userTrack,
+      userTrackError
+    })
+
+    if (audioTrack !== null && userTrack !== null) {
+      console.log('LOGLOG audioStreamTrack', {
+        audioStreamTrack: userTrack.getMediaStreamTrack(),
+        audioStreamTrackProp: (userTrack as any)._mediaStreamTrack,
+        originMediaStreamTrack: (userTrack as any)._originMediaStreamTrack
+      })
+
+      // eslint-disable-next-line dot-notation
+      userTrack['_originMediaStreamTrack'] = (
+        userTrack as any
+      )._mediaStreamTrack
+
+      setLocalAudioTrack(audioTrack)
+      setLocalVideoTrack(userTrack)
+
+      mediaStore.current[0] = {
+        audioTrack: audioTrack,
+        videoTrack: userTrack
       }
-    )
-
-    if (audioTrack !== null && videoTrack?.track !== null) {
-      setReady(true)
-
-      if (mediaStore.current[0].audioTrack) {
-        mediaStore.current[0].videoTrack = videoTrack.track
-      } else {
-        mediaStore.current[0] = { audioTrack, videoTrack: videoTrack.track }
-        setLocalAudioTrack(audioTrack)
-      }
-
-      setLocalVideoTrack(videoTrack.track)
 
       setReady(true)
-    }
-
-    if (audioTrackError || videoTrack?.error) {
+    } else if (audioTrackError || userTrackError || environmentTrackError) {
       console.error(audioTrackError)
       setReady(false)
     }
 
     return () => {
       if (audioTrack) audioTrack.close()
-      // if (environmentTrack) environmentTrack.close()
-      // if (userTrack) userTrack.close()
-      if (videoTrack?.track) videoTrack.track.close()
+      if (environmentTrack) environmentTrack.close()
+      if (userTrack) userTrack.close()
     }
-  }, [audioTrackReady, audioTrackError, videoTrack]) //, ready])
+  }, [
+    audioTrackReady,
+    audioTrackError,
+    environmentTrackReady,
+    environmentTrackError,
+    userTrackReady,
+    userTrackError
+  ]) //, ready])
 
   useEffect(() => {
-    console.log('LOGLOG useEffect:[videoTrack]', { videoTrack })
-  }, [videoTrack])
+    console.log('LOGLOG useEffect:localVideoTrack', { localVideoTrack })
+    if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
+  }, [localVideoTrack])
+
+  useEffect(() => {
+    AgoraRTC.getCameras().then((cameras) => {
+      console.log('LOGLOG cameras', { cameras })
+    })
+  }, [])
 
   return (
     <TracksProvider
