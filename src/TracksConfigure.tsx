@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, PropsWithChildren } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  PropsWithChildren,
+  useMemo
+} from 'react'
 import { RtcPropsInterface, mediaStore } from './PropsContext'
 import {
   ILocalVideoTrack,
@@ -7,20 +13,29 @@ import {
 } from 'agora-rtc-react'
 import { TracksProvider } from './TracksContext'
 
-const useTracks = createMicrophoneAndCameraTracks(
-  { encoderConfig: {} },
-  { encoderConfig: {} }
-)
 /**
  * React component that create local camera and microphone tracks and assigns them to the child components
  */
-const TracksConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (props) => {
+const TracksConfigure: React.FC<
+  PropsWithChildren<Partial<RtcPropsInterface>>
+> = (props) => {
   const [ready, setReady] = useState<boolean>(false)
   const [localVideoTrack, setLocalVideoTrack] =
     useState<ILocalVideoTrack | null>(null)
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
-  const { ready: trackReady, tracks, error } = useTracks()
+  const [facingMode, _] = useState<'user' | 'environment'>('user')
+  const {
+    ready: trackReady,
+    tracks,
+    error
+  } = useMemo(
+    createMicrophoneAndCameraTracks(
+      { encoderConfig: {} },
+      { encoderConfig: {}, facingMode }
+    ),
+    [facingMode]
+  )
   const mediaStore = useRef<mediaStore>({})
 
   useEffect(() => {
