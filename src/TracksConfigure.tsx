@@ -39,9 +39,19 @@ const TracksConfigure: React.FC<
   const mediaStore = useRef<mediaStore>({})
 
   const switchTrack = () => {
+    console.log('switchTrack', {
+      trackReady,
+      tracks,
+      error,
+      environmentReady,
+      environmentTrack,
+      environmentError
+    })
+
     if (!tracks) return
     setReady(false)
 
+    setFacingMode(facingMode === 'user' ? 'environment' : 'user')
     setLocalVideoTrack(facingMode === 'user' ? environmentTrack : tracks[1])
 
     setReady(true)
