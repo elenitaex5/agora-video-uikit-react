@@ -52,11 +52,13 @@ const TracksConfigure: React.FC<
     ready: boolean
     track: ICameraVideoTrack | null
     error: AgoraRTCError | null
-    facingMode: 'user' | 'environment'
-  }>(() => ({
-    ...useUserTrack(),
-    facingMode: 'user'
-  }))
+    facingMode: 'user' | 'environment' | null
+  }>({
+    ready: false,
+    track: null,
+    error: null,
+    facingMode: null
+  })
 
   const swapCamera = () => {
     console.log('LOGLOG swapCamera', { localVideoTrack, videoTrack })
@@ -120,6 +122,20 @@ const TracksConfigure: React.FC<
     console.log('LOGLOG useEffect:[localVideoTrack]', { localVideoTrack })
     if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
   }, [localVideoTrack])
+
+  useEffect(() => {
+    console.log('LOGLOG useEffect:[videoTrack]', { videoTrack })
+  }, [videoTrack])
+
+  useEffect(() => {
+    const track = useUserTrack()
+    console.log('LOGLOG useEffect:[]', { track })
+
+    setVideoTrack({
+      ...track,
+      facingMode: 'user'
+    })
+  }, [])
 
   return (
     <TracksProvider
