@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useRef,
   PropsWithChildren,
-  useMemo
+  useCallback
 } from 'react'
 import { RtcPropsInterface, mediaStore } from './PropsContext'
 import {
@@ -29,17 +29,22 @@ const TracksConfigure: React.FC<
     ready: trackReady,
     tracks,
     error
-  } = useMemo(
+  } = useCallback(
     createMicrophoneAndCameraTracks(
       { encoderConfig: {} },
       { encoderConfig: {} }
     ),
     [facingMode]
-  )
+  )()
   const mediaStore = useRef<mediaStore>({})
 
   useEffect(() => {
-    console.log('LOGLOG useEffect:[tracks, trackReady]', { tracks, trackReady })
+    console.log('LOGLOG useEffect:[tracks, trackReady, error]', {
+      tracks,
+      trackReady,
+      error
+    })
+
     if (tracks !== null) {
       setLocalAudioTrack(tracks[0])
       setLocalVideoTrack(tracks[1])
@@ -54,6 +59,8 @@ const TracksConfigure: React.FC<
     }
 
     return () => {
+      console.log('LOGLOG useEffect:[tracks, trackReady, error] cleanup')
+
       if (tracks && tracks?.length > 0) {
         tracks[0]?.close()
         tracks[1]?.close()
