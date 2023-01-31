@@ -32,7 +32,7 @@ const TracksConfigure: React.FC<
   } = useCallback(
     createMicrophoneAndCameraTracks(
       { encoderConfig: {} },
-      { encoderConfig: {} }
+      { encoderConfig: {}, facingMode }
     ),
     [facingMode]
   )()
