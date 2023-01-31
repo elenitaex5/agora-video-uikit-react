@@ -84,6 +84,17 @@ const TracksConfigure: React.FC<
   }
 
   useEffect(() => {
+    console.log('LOGLOG environment', {
+      environmentTrackReady,
+      environmentTrack,
+      environmentTrackError
+    })
+    console.log('LOGLOG user', {
+      userTrackReady,
+      userTrack,
+      userTrackError
+    })
+
     if (audioTrack !== null && userTrack !== null) {
       setLocalAudioTrack(audioTrack)
       setLocalVideoTrack(userTrack)
@@ -114,6 +125,7 @@ const TracksConfigure: React.FC<
   ]) //, ready])
 
   useEffect(() => {
+    console.log('LOGLOG useEffect:localVideoTrack', { localVideoTrack })
     if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
   }, [localVideoTrack])
 
