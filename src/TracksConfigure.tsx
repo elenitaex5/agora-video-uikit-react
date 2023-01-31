@@ -29,13 +29,13 @@ const TracksConfigure: React.FC<
     ready: trackReady,
     tracks,
     error
-  } = useCallback(
-    createMicrophoneAndCameraTracks(
+  } = useCallback(() => {
+    console.log('LOGLOG useCallback:[facingMode]', { facingMode })
+    return createMicrophoneAndCameraTracks(
       { encoderConfig: {} },
       { encoderConfig: {}, facingMode }
-    ),
-    [facingMode]
-  )()
+    )
+  }, [facingMode])()()
   const mediaStore = useRef<mediaStore>({})
 
   useEffect(() => {
