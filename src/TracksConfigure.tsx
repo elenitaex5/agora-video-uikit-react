@@ -39,7 +39,7 @@ const TracksConfigure: React.FC<
   const mediaStore = useRef<mediaStore>({})
 
   useEffect(() => {
-    console.log('LOGLOG useEffect:tracks', tracks)
+    console.log('LOGLOG useEffect:[tracks, trackReady]', { tracks, trackReady })
     if (tracks !== null) {
       setLocalAudioTrack(tracks[0])
       setLocalVideoTrack(tracks[1])
@@ -52,13 +52,14 @@ const TracksConfigure: React.FC<
       console.error(error)
       setReady(false)
     }
+
     return () => {
-      if (tracks) {
+      if (tracks && tracks?.length > 0) {
         tracks[0]?.close()
         tracks[1]?.close()
       }
     }
-  }, [trackReady, error]) //, ready])
+  }, [trackReady, tracks, error]) //, ready])
 
   return (
     <TracksProvider
