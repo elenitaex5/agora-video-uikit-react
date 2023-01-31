@@ -32,7 +32,7 @@ const TracksConfigure: React.FC<
   } = useMemo(
     createMicrophoneAndCameraTracks(
       { encoderConfig: {} },
-      { encoderConfig: {}, facingMode }
+      { encoderConfig: {} }
     ),
     [facingMode]
   )
