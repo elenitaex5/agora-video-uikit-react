@@ -85,6 +85,8 @@ const TracksConfigure: React.FC<
       }
     )
 
+    if (mediaStore.current[0] === undefined) mediaStore.current[0] = {}
+
     if (audioTrack !== null && mediaStore.current[0].audioTrack === null) {
       setLocalAudioTrack(audioTrack)
       mediaStore.current[0].audioTrack = audioTrack
