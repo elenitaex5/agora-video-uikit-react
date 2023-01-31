@@ -6,7 +6,7 @@ import React, {
   useMemo
 } from 'react'
 import { RtcPropsInterface, mediaStore } from './PropsContext'
-import AgoraRTC, {
+import {
   ILocalVideoTrack,
   ILocalAudioTrack,
   createCameraVideoTrack,
@@ -65,15 +65,16 @@ const TracksConfigure: React.FC<
     error: userTrackError
   } = useUserTrack()
   const mediaStore = useRef<mediaStore>({})
-  const [currentTrackId, setCurrentTrackId] = useState<string | null>(null)
+  const [_, setCurrentTrackId] = useState<string | null>(null)
 
   const swapCamera = () => {
     setReady(false)
 
     if (!environmentTrack || !userTrack) return
 
-    const newTrack =
-      currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
+    // const newTrack =
+    //   currentTrackId === userTrack.getTrackId() ? environmentTrack : userTrack
+    const newTrack = userTrack
     console.log('LOGLOG', { newTrack })
     // alert(`New track ${newTrack.getTrackId()}`)
     mediaStore.current[0].videoTrack = newTrack
@@ -137,12 +138,6 @@ const TracksConfigure: React.FC<
     console.log('LOGLOG useEffect:localVideoTrack', { localVideoTrack })
     if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
   }, [localVideoTrack])
-
-  useEffect(() => {
-    AgoraRTC.getCameras().then((cameras) => {
-      console.log('LOGLOG cameras', { cameras })
-    })
-  }, [])
 
   return (
     <TracksProvider
