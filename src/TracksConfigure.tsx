@@ -39,6 +39,7 @@ const TracksConfigure: React.FC<
   const mediaStore = useRef<mediaStore>({})
 
   useEffect(() => {
+    console.log('LOGLOG useEffect:tracks', tracks)
     if (tracks !== null) {
       setLocalAudioTrack(tracks[0])
       setLocalVideoTrack(tracks[1])
@@ -53,9 +54,7 @@ const TracksConfigure: React.FC<
     }
     return () => {
       if (tracks) {
-        // eslint-disable-next-line no-unused-expressions
         tracks[0]?.close()
-        // eslint-disable-next-line no-unused-expressions
         tracks[1]?.close()
       }
     }
