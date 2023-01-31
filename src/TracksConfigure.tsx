@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  PropsWithChildren,
-  useCallback
-} from 'react'
+import React, { useState, useEffect, useRef, PropsWithChildren } from 'react'
 import { RtcPropsInterface, mediaStore } from './PropsContext'
 import {
   ILocalVideoTrack,
@@ -25,18 +19,22 @@ const TracksConfigure: React.FC<
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user')
-  const {
-    ready: trackReady,
-    tracks,
-    error
-  } = useCallback(() => {
-    console.log('LOGLOG useCallback:[facingMode]', { facingMode })
-    return createMicrophoneAndCameraTracks(
+  const [{ ready: trackReady, tracks, error }, setTracks] = useState(
+    createMicrophoneAndCameraTracks(
       { encoderConfig: {} },
-      { encoderConfig: {}, facingMode }
+      { encoderConfig: {} }
     )
-  }, [facingMode])()()
+  )
   const mediaStore = useRef<mediaStore>({})
+
+  useEffect(() => {
+    setTracks(
+      createMicrophoneAndCameraTracks(
+        { encoderConfig: {} },
+        { encoderConfig: {}, facingMode }
+      )
+    )
+  }, [facingMode])
 
   useEffect(() => {
     console.log('LOGLOG useEffect:[tracks, trackReady, error]', {

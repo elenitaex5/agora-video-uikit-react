@@ -333,13 +333,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
     if (callActive && channelJoined && uid?.current !== undefined) {
       publish()
     }
-  }, [
-    callActive,
-    localVideoTrack?.enabled,
-    localAudioTrack?.enabled,
-    channelJoined,
-    uid?.current
-  ])
+  }, [callActive, localVideoTrack, localAudioTrack?.enabled, channelJoined])
 
   // update local state if tracks are not null
   useEffect(() => {
@@ -353,7 +347,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
         value: [localAudioTrack, localVideoTrack]
       })
     }
-  }, [rtcProps.channel, channelJoined])
+  }, [rtcProps.channel, channelJoined, localVideoTrack])
 
   // renew token if token is updated
   useEffect(() => {
