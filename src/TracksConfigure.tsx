@@ -4,9 +4,7 @@ import {
   ILocalVideoTrack,
   ILocalAudioTrack,
   createCameraVideoTrack,
-  createMicrophoneAudioTrack,
-  ICameraVideoTrack,
-  AgoraRTCError
+  createMicrophoneAudioTrack
 } from 'agora-rtc-react'
 import { TracksProvider } from './TracksContext'
 
@@ -47,33 +45,19 @@ const TracksConfigure: React.FC<
   } = useAudioTrack()
 
   const mediaStore = useRef<mediaStore>({})
-  const [currentTrackId, setCurrentTrackId] = useState<string | null>(null)
-  const [videoTrack, setVideoTrack] = useState<{
-    ready: boolean
-    track: ICameraVideoTrack | null
-    error: AgoraRTCError | null
-    facingMode: 'user' | 'environment' | null
-  }>({
-    ready: false,
-    track: null,
-    error: null,
-    facingMode: null
-  })
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user')
+  const [videoTrack, setVideoTrack] = useState(() => useUserTrack())
 
   const swapCamera = () => {
     console.log('LOGLOG swapCamera', { localVideoTrack, videoTrack })
 
-    if (videoTrack.facingMode === 'user') {
-      setVideoTrack({
-        ...useEnvironmentTrack(),
-        facingMode: 'environment'
-      })
+    if (facingMode === 'user') {
+      setVideoTrack(useEnvironmentTrack())
+      setFacingMode('environment')
     } else {
-      setVideoTrack({
-        ...useUserTrack(),
-        facingMode: 'user'
-      })
+      setVideoTrack(useUserTrack())
     }
+
     // mediaStore.current[0].videoTrack = newTrack
     // setLocalVideoTrack(newTrack)
   }
@@ -83,7 +67,7 @@ const TracksConfigure: React.FC<
       'LOGLOG useEffect:[audioTrackReady, audioTrackError, videoTrack]',
       {
         videoTrack,
-        currentTrackId
+        facingMode
       }
     )
 
@@ -95,11 +79,7 @@ const TracksConfigure: React.FC<
       setReady(true)
     }
 
-    if (
-      videoTrack?.track !== null &&
-      videoTrack?.ready &&
-      currentTrackId !== videoTrack.track.getTrackId()
-    ) {
+    if (videoTrack?.track !== null && videoTrack?.ready) {
       setLocalVideoTrack(videoTrack.track)
       mediaStore.current[0].videoTrack = videoTrack.track
       setReady(true)
@@ -119,23 +99,8 @@ const TracksConfigure: React.FC<
   }, [audioTrackReady, audioTrackError, videoTrack]) //, ready])
 
   useEffect(() => {
-    console.log('LOGLOG useEffect:[localVideoTrack]', { localVideoTrack })
-    if (localVideoTrack) setCurrentTrackId(localVideoTrack.getTrackId())
-  }, [localVideoTrack])
-
-  useEffect(() => {
     console.log('LOGLOG useEffect:[videoTrack]', { videoTrack })
   }, [videoTrack])
-
-  useEffect(() => {
-    const track = useUserTrack()
-    console.log('LOGLOG useEffect:[]', { track })
-
-    setVideoTrack({
-      ...track,
-      facingMode: 'user'
-    })
-  }, [])
 
   return (
     <TracksProvider
