@@ -96,6 +96,17 @@ const TracksConfigure: React.FC<
     })
 
     if (audioTrack !== null && userTrack !== null) {
+      console.log('LOGLOG audioStreamTrack', {
+        audioStreamTrack: userTrack.getMediaStreamTrack(),
+        audioStreamTrackProp: (userTrack as any)._mediaStreamTrack,
+        originMediaStreamTrack: (userTrack as any)._originMediaStreamTrack
+      })
+
+      // eslint-disable-next-line dot-notation
+      userTrack['_originMediaStreamTrack'] = (
+        userTrack as any
+      )._mediaStreamTrack
+
       setLocalAudioTrack(audioTrack)
       setLocalVideoTrack(userTrack)
 
@@ -105,7 +116,7 @@ const TracksConfigure: React.FC<
       }
 
       setReady(true)
-    } else if (audioTrackError) {
+    } else if (audioTrackError || userTrackError || environmentTrackError) {
       console.error(audioTrackError)
       setReady(false)
     }
