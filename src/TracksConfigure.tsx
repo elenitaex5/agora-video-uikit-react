@@ -3,10 +3,8 @@ import { RtcPropsInterface, mediaStore } from './PropsContext'
 import {
   ILocalVideoTrack,
   ILocalAudioTrack,
-  createMicrophoneAndCameraTracks,
-  IMicrophoneAudioTrack,
-  ICameraVideoTrack,
-  AgoraRTCError
+  createMicrophoneAudioTrack,
+  createCameraVideoTrack
 } from 'agora-rtc-react'
 import { TracksProvider } from './TracksContext'
 
@@ -22,56 +20,56 @@ const TracksConfigure: React.FC<
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user')
-  const [{ ready: trackReady, tracks, error }, setTracks] = useState<{
-    ready: boolean
-    tracks: [IMicrophoneAudioTrack, ICameraVideoTrack] | null
-    error: AgoraRTCError | null
-  }>({
-    ready: false,
-    tracks: null,
-    error: null
-  })
-  const mediaStore = useRef<mediaStore>({})
+  const {
+    ready: audioTrackReady,
+    track: audioTrack,
+    error: audioTrackError
+  } = createMicrophoneAudioTrack({ encoderConfig: {} })()
+  const {
+    ready: videoTrackReady,
+    track: videoTrack,
+    error: videoTrackError
+  } = createCameraVideoTrack({ encoderConfig: {} })()
 
-  useEffect(() => {
-    console.log('LOGLOG useEffect:[facingMode]', { facingMode })
-    setTracks(
-      createMicrophoneAndCameraTracks(
-        { encoderConfig: {} },
-        { encoderConfig: {}, facingMode }
-      )()
-    )
-  }, [facingMode])
+  const tracks = { audioTrack, videoTrack }
+
+  const mediaStore = useRef<mediaStore>({})
 
   useEffect(() => {
     console.log('LOGLOG useEffect:[tracks, trackReady, error]', {
       tracks,
-      trackReady,
-      error
+      trackReady: audioTrackReady,
+      error: audioTrackError
     })
 
-    if (tracks !== null) {
-      setLocalAudioTrack(tracks[0])
-      setLocalVideoTrack(tracks[1])
+    if (tracks?.audioTrack && tracks?.videoTrack) {
+      setLocalAudioTrack(tracks.audioTrack)
+      setLocalVideoTrack(tracks.videoTrack)
       mediaStore.current[0] = {
-        audioTrack: tracks[0],
-        videoTrack: tracks[1]
+        audioTrack: tracks.audioTrack,
+        videoTrack: tracks.videoTrack
       }
       setReady(true)
-    } else if (error) {
-      console.error(error)
+    } else if (audioTrackError) {
+      console.error(audioTrackError)
       setReady(false)
     }
 
     return () => {
       console.log('LOGLOG useEffect:[tracks, trackReady, error] cleanup')
 
-      if (tracks && tracks?.length > 0) {
-        tracks[0]?.close()
-        tracks[1]?.close()
+      if (tracks) {
+        tracks.audioTrack?.close()
+        tracks.videoTrack?.close()
       }
     }
-  }, [trackReady, tracks, error]) //, ready])
+  }, [
+    audioTrackReady,
+    videoTrackReady,
+    tracks,
+    audioTrackError,
+    videoTrackError
+  ]) //, ready])
 
   return (
     <TracksProvider
