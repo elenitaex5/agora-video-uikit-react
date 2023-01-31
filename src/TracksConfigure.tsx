@@ -19,11 +19,11 @@ const TracksConfigure: React.FC<
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user')
-  const [{ ready: trackReady, tracks, error }, setTracks] = useState(
+  const [{ ready: trackReady, tracks, error }, setTracks] = useState(() =>
     createMicrophoneAndCameraTracks(
       { encoderConfig: {} },
       { encoderConfig: {} }
-    )
+    )()
   )
   const mediaStore = useRef<mediaStore>({})
 
@@ -32,7 +32,7 @@ const TracksConfigure: React.FC<
       createMicrophoneAndCameraTracks(
         { encoderConfig: {} },
         { encoderConfig: {}, facingMode }
-      )
+      )()
     )
   }, [facingMode])
 
