@@ -3,7 +3,10 @@ import { RtcPropsInterface, mediaStore } from './PropsContext'
 import {
   ILocalVideoTrack,
   ILocalAudioTrack,
-  createMicrophoneAndCameraTracks
+  createMicrophoneAndCameraTracks,
+  IMicrophoneAudioTrack,
+  ICameraVideoTrack,
+  AgoraRTCError
 } from 'agora-rtc-react'
 import { TracksProvider } from './TracksContext'
 
@@ -19,15 +22,19 @@ const TracksConfigure: React.FC<
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user')
-  const [{ ready: trackReady, tracks, error }, setTracks] = useState(() =>
-    createMicrophoneAndCameraTracks(
-      { encoderConfig: {} },
-      { encoderConfig: {} }
-    )()
-  )
+  const [{ ready: trackReady, tracks, error }, setTracks] = useState<{
+    ready: boolean
+    tracks: [IMicrophoneAudioTrack, ICameraVideoTrack] | null
+    error: AgoraRTCError | null
+  }>({
+    ready: false,
+    tracks: null,
+    error: null
+  })
   const mediaStore = useRef<mediaStore>({})
 
   useEffect(() => {
+    console.log('LOGLOG useEffect:[facingMode]', { facingMode })
     setTracks(
       createMicrophoneAndCameraTracks(
         { encoderConfig: {} },
