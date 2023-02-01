@@ -312,22 +312,20 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
   // publish local stream
   useEffect(() => {
     async function publish() {
-      console.log('LOGLOG publish', { localVideoTrack })
       const currentPublishedTrack = await client.localTracks.find(
         (lt) => lt.trackMediaType === 'video'
       )
 
-      console.log('LOGLOG publish 2', { currentPublishedTrack })
       if (
         currentPublishedTrack &&
         currentPublishedTrack.getTrackId() !== localVideoTrack?.getTrackId()
       ) {
-        console.log('LOGLOG unpublish')
         await client.unpublish([currentPublishedTrack])
         localVideoTrackHasPublished = false
 
         if (localVideoTrack) {
-          console.log('LOGLOG publish again')
+          await localVideoTrack.setEnabled(true)
+
           await client.publish([localVideoTrack]).then(() => {
             localVideoTrackHasPublished = true
           })
@@ -337,6 +335,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
       if (rtcProps.enableDualStream) {
         await client.enableDualStream()
       }
+
       // handle publish fail if track is not enabled
       if (localAudioTrack?.enabled && channelJoined) {
         if (!localAudioTrackHasPublished) {
@@ -355,11 +354,10 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
       }
     }
 
-    console.log('Publish', localVideoTrack, localAudioTrack, callActive)
     if (callActive) {
       publish()
     }
-  }, [callActive, localVideoTrack, localAudioTrack?.enabled, channelJoined])
+  }, [callActive, localVideoTrack, localAudioTrack, channelJoined])
 
   // update local state if tracks are not null
   useEffect(() => {
