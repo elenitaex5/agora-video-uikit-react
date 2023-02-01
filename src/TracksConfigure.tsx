@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, PropsWithChildren } from 'react'
-import { RtcPropsInterface, mediaStore } from './PropsContext'
+import React, { useState, useEffect, PropsWithChildren } from 'react'
+import { RtcPropsInterface } from './PropsContext'
 import {
   ILocalVideoTrack,
   ILocalAudioTrack,
@@ -8,7 +8,7 @@ import {
 } from 'agora-rtc-react'
 import { TracksProvider } from './TracksContext'
 
-const useTrack = createMicrophoneAndCameraTracks(
+const useTracks = createMicrophoneAndCameraTracks(
   { encoderConfig: {} },
   { encoderConfig: {} }
 )
@@ -25,21 +25,23 @@ const TracksConfigure: React.FC<
   PropsWithChildren<Partial<RtcPropsInterface>>
 > = (props) => {
   const [ready, setReady] = useState<boolean>(false)
+  // const mediaStore = useRef<mediaStore>({})
+
   const [localVideoTrack, setLocalVideoTrack] =
     useState<ILocalVideoTrack | null>(null)
   const [localAudioTrack, setLocalAudioTrack] =
     useState<ILocalAudioTrack | null>(null)
+
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user')
-  const { ready: trackReady, tracks, error } = useTrack()
+  const { ready: trackReady, tracks, error } = useTracks()
   const {
     ready: environmentReady,
     track: environmentTrack,
     error: environmentError
   } = useEnvironmentTrack()
-  const mediaStore = useRef<mediaStore>({})
 
-  const switchTrack = () => {
-    console.log('switchTrack', {
+  const switchCamera = () => {
+    console.log('switchCamera', {
       trackReady,
       tracks,
       error,
@@ -61,21 +63,26 @@ const TracksConfigure: React.FC<
     if (tracks !== null) {
       setLocalAudioTrack(tracks[0])
       setLocalVideoTrack(tracks[1])
-      mediaStore.current[0] = {
-        audioTrack: tracks[0],
-        videoTrack: tracks[1]
-      }
+
+      // mediaStore.current[0] = {
+      //   audioTrack: tracks[0],
+      //   videoTrack: tracks[1]
+      // }
+
       setReady(true)
     } else if (error) {
       console.error(error)
       setReady(false)
     }
+
     return () => {
       if (tracks) {
         // eslint-disable-next-line no-unused-expressions
         tracks[0]?.close()
         // eslint-disable-next-line no-unused-expressions
         tracks[1]?.close()
+
+        environmentTrack?.close()
       }
     }
   }, [trackReady, error]) //, ready])
@@ -86,18 +93,11 @@ const TracksConfigure: React.FC<
     <TracksProvider
       value={{
         localVideoTrack: localVideoTrack,
-        localAudioTrack: localAudioTrack
+        localAudioTrack: localAudioTrack,
+        switchCamera,
+        facingMode
       }}
     >
-      <button
-        onClick={switchTrack}
-        style={{
-          width: '100%',
-          padding: '1rem 0'
-        }}
-      >
-        Swap
-      </button>
       {ready ? props.children : null}
     </TracksProvider>
   )
