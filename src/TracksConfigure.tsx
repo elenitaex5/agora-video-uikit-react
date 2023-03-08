@@ -25,7 +25,6 @@ const TracksConfigure: React.FC<
   PropsWithChildren<Partial<RtcPropsInterface>>
 > = (props) => {
   const [ready, setReady] = useState<boolean>(false)
-  // const mediaStore = useRef<mediaStore>({})
 
   const [localVideoTrack, setLocalVideoTrack] =
     useState<ILocalVideoTrack | null>(null)
@@ -80,7 +79,7 @@ const TracksConfigure: React.FC<
         environmentTrack?.close()
       }
     }
-  }, [trackReady, error]) //, ready])
+  }, [trackReady, error])
 
   if (!ready) return null
 
