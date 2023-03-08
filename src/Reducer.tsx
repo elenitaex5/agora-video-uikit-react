@@ -42,7 +42,6 @@ const reducer = (
       }
       break
     case 'update-user-video':
-      console.log('LOGLOG update-user-video!', action)
       if (actionTypeGuard(action, action.type)) {
         stateUpdate = {
           min: state.min.map((user: UIKitUser) => {
@@ -72,7 +71,6 @@ const reducer = (
       }
       break
     case 'user-joined':
-      console.log('LOGLOG user-joined!', action)
       if (actionTypeGuard(action, action.type)) {
         if (uids.indexOf(action.value[0].uid) === -1) {
           const minUpdate: stateType['min'] = [
@@ -151,7 +149,6 @@ const reducer = (
       }
       break
     case 'user-published':
-      console.log('LOGLOG user-published!', action)
       if (actionTypeGuard(action, action.type)) {
         if (state.max[0].uid === action.value[0].uid) {
           stateUpdate = {
