@@ -64,11 +64,6 @@ const TracksConfigure: React.FC<
       setLocalAudioTrack(tracks[0])
       setLocalVideoTrack(tracks[1])
 
-      // mediaStore.current[0] = {
-      //   audioTrack: tracks[0],
-      //   videoTrack: tracks[1]
-      // }
-
       setReady(true)
     } else if (error) {
       console.error(error)
