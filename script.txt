@@ -1,1 +1,0 @@
-yarn build && cp -rf dist ../abi-widget/node_modules/agora-video-uikit-react
