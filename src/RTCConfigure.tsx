@@ -354,10 +354,16 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
       }
     }
 
-    if (callActive) {
+    if (callActive && channelJoined && uid?.current !== undefined) {
       publish()
     }
-  }, [callActive, localVideoTrack, localAudioTrack, channelJoined])
+  }, [
+    callActive,
+    localVideoTrack,
+    localAudioTrack,
+    channelJoined,
+    uid?.current
+  ])
 
   // update local state if tracks are not null
   useEffect(() => {
