@@ -4,8 +4,8 @@ import {
   ILocalAudioTrack,
   ILocalVideoTrack
 } from 'agora-rtc-react'
-import React, { PropsWithChildren, useEffect, useRef, useState } from 'react'
-import { mediaStore, RtcPropsInterface } from './PropsContext'
+import React, { PropsWithChildren, useEffect, useState } from 'react'
+import { RtcPropsInterface } from './PropsContext'
 import { TracksProvider } from './TracksContext'
 
 const useTracks = createMicrophoneAndCameraTracks(
@@ -31,17 +31,11 @@ const TracksConfigure: React.FC<
 
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user')
   const { ready: trackReady, tracks, error } = useTracks()
-  const {
-    ready: environmentReady,
-    track: environmentTrack,
-    error: environmentError
-  } = useEnvironmentTrack()
-  const mediaStore = useRef<mediaStore>({})
+  const { track: environmentTrack } = useEnvironmentTrack()
 
   const switchCamera = async () => {
     if (!tracks || !tracks[1] || !environmentTrack) return
 
-    // await localVideoTrack?.setEnabled(false)
     const facing = facingMode === 'user' ? 'environment' : 'user'
     setLocalVideoTrack(facing === 'user' ? tracks[1] : environmentTrack)
     setFacingMode(facing)
