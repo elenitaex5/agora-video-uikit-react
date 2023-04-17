@@ -59,6 +59,7 @@ const PinnedVideo: React.FC = () => {
       }}
     >
       <div
+        id='maxviewcontainer'
         style={{
           ...{
             display: 'flex',
