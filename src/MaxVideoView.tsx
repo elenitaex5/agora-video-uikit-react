@@ -69,19 +69,12 @@ const styles = {
   videoContainer: {
     display: 'flex',
     flex: 1,
-    position: 'relative',
-    borderWidth: 3,
-    borderColor: 'blue',
-    borderStyle: 'solid'
+    position: 'relative'
   } as CSSProperties,
   videoplayer: {
-    width: 'auto',
-    height: '100%',
+    width: '100%',
     display: 'flex',
-    flex: 1,
-    borderWidth: 3,
-    borderColor: 'pink',
-    borderStyle: 'dashed'
+    flex: 1
   },
   overlay: {
     position: 'absolute',
