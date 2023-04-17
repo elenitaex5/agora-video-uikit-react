@@ -75,7 +75,8 @@ const styles = {
     borderStyle: 'solid'
   } as CSSProperties,
   videoplayer: {
-    width: '100%',
+    width: 'auto',
+    height: '100%',
     display: 'flex',
     flex: 1,
     borderWidth: 3,
