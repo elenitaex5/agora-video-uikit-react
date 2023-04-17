@@ -33,7 +33,7 @@ const MaxVideoView = (props: {
     >
       {user.hasVideo === 1 ? (
         // hasVideo is 1 if the local user has video enabled, or if remote user video is subbed
-        <div id='finishvidecontainer' style={styles.videoContainer}>
+        <div id='finishvideocontainer' style={styles.videoContainer}>
           {!rtcProps.disableRtm && <Username user={user} />}
           <AgoraVideoPlayer
             style={styles.videoplayer}
