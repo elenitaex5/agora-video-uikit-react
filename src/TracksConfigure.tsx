@@ -42,6 +42,7 @@ const TracksConfigure: React.FC<
   }
 
   useEffect(() => {
+    console.log('useEffect localVideo track', localVideoTrack, !localVideoTrack)
     if (!localVideoTrack) return
     localVideoTrack?.setEnabled(false)
   }, [localVideoTrack])
@@ -55,6 +56,8 @@ const TracksConfigure: React.FC<
     }
 
     return () => {
+      console.log('useEffect con error', error)
+
       if (tracks) {
         // eslint-disable-next-line no-unused-expressions
         tracks[0]?.close()
