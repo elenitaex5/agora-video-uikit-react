@@ -61,6 +61,7 @@ const TracksConfigure: React.FC<
     } else if (error) {
       console.error(error)
       console.log('useEffect con error', error)
+      callbacks?.EndCall && callbacks.EndCall()
     }
 
     return () => {
