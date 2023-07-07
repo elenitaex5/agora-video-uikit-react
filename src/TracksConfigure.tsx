@@ -49,7 +49,6 @@ const TracksConfigure: React.FC<
   }
 
   useEffect(() => {
-    console.log('useEffect localVideo track', localVideoTrack, !localVideoTrack)
     if (!localVideoTrack) return
     localVideoTrack?.setEnabled(false)
   }, [localVideoTrack])
@@ -60,7 +59,6 @@ const TracksConfigure: React.FC<
       setLocalVideoTrack(tracks[1])
     } else if (error) {
       console.error(error)
-      console.log('useEffect con error', error)
       callbacks?.EndCall && callbacks.EndCall()
     }
 
