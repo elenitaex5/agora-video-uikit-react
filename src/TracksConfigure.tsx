@@ -79,8 +79,8 @@ const TracksConfigure: React.FC<
         localVideoTrack.close()
         localVideoTrack.stop()
       }
-      if (error) {
-        callbacks?.EndCall && callbacks.EndCall()
+      if (error && callbacks?.EndCall) {
+         callbacks.EndCall()
       }
     }
   }, [trackReady, error])
