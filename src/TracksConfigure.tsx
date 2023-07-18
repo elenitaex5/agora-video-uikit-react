@@ -58,8 +58,6 @@ const TracksConfigure: React.FC<
       setLocalAudioTrack(tracks[0])
       setLocalVideoTrack(tracks[1])
     } else if (error) {
-      console.error('error', error)
-      console.log('ending call here')
       callbacks?.EndCall && callbacks.EndCall()
     }
 
@@ -81,8 +79,9 @@ const TracksConfigure: React.FC<
         localVideoTrack.close()
         localVideoTrack.stop()
       }
-      console.log('ending call here 2', trackReady, error)
-      callbacks?.EndCall && callbacks.EndCall()
+      if (error) {
+        callbacks?.EndCall && callbacks.EndCall()
+      }
     }
   }, [trackReady, error])
 
