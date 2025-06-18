@@ -44,7 +44,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
   const canJoin = useRef(
     new Promise<boolean | void>((resolve, reject) => {
       joinRes = resolve
-      console.log(reject)
+      console.log('reject', reject)
     })
   )
 
@@ -78,7 +78,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
   useEffect(() => {
     async function init() {
       try {
-        console.log(client)
+        console.log('client', client)
         client.on('user-joined', async (...args) => {
           const [remoteUser] = args
           if (
@@ -300,7 +300,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
           stopScreenshare()
           isScreensharingRef.current = false
         } catch (e) {
-          console.error(e)
+          console.error('stopscreenshare error', e)
         }
         canJoin.current = client
           .leave()

@@ -139,7 +139,7 @@ const RtmConfigure = (props: any) => {
       : (localUid.current = String(timeNow()))
 
     rtmClient.on('ConnectionStateChanged', (state, reason) => {
-      console.log(state, reason)
+      console.log('ConnectionStateChanged', state, reason)
     })
 
     rtmClient.on('TokenExpired', async () => {
@@ -264,7 +264,7 @@ const RtmConfigure = (props: any) => {
     } else if (message.messageType === 'TEXT') {
       messageObject = JSON.parse(message.text)
     }
-    console.log(messageObject, peerId)
+    console.log('handleReceivedMessage', messageObject, peerId)
     if (messageObject) {
       switch (messageObject.messageType) {
         case 'UserData':
@@ -345,7 +345,7 @@ const RtmConfigure = (props: any) => {
     try {
       await channel.sendMessage(message)
     } catch (e) {
-      console.error(e)
+      console.error('sendChannelMessage', e)
     }
   }
 
@@ -357,7 +357,7 @@ const RtmConfigure = (props: any) => {
     try {
       await rtmClient.sendMessageToPeer(message, String(peerId))
     } catch (e) {
-      console.error(e)
+      console.error('sendPeerMessage', e)
     }
   }
 

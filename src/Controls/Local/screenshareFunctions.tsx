@@ -49,7 +49,7 @@ const startScreenshare = async (
         screenClient.removeAllListeners()
       })
     } catch (e) {
-      console.log(e)
+      console.log('init error', e)
     }
   }
 
@@ -65,7 +65,7 @@ const startScreenshare = async (
         const token = data.rtcToken
         returnedUid = await screenClient.join(appId, channel, token, uid)
       } catch (e) {
-        console.log(e)
+        console.log('join error', e)
       }
     } else {
       returnedUid = await screenClient.join(
@@ -96,7 +96,7 @@ const startScreenshare = async (
       await screenClient.leave()
       screenClient.removeAllListeners()
     } catch (e) {
-      console.log(e)
+      console.log('stop error', e)
     }
   }
 
@@ -105,7 +105,7 @@ const startScreenshare = async (
   await init()
   await join()
   await publish()
-  if (returnedUid) console.log(returnedUid)
+  if (returnedUid) console.log('returnedUid', returnedUid)
 }
 
 let stopScreenshare = () => {}
