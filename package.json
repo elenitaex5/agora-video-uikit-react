@@ -1,6 +1,6 @@
 {
   "name": "agora-video-uikit-react",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "A React UIKit for the Agora Web SDK (based on EkaanshArora project)",
   "author": "elenitaex5 <elena.martincastillo@gmail.com>",
   "license": "MIT",
@@ -38,7 +38,7 @@
     "docs": "typedoc src"
   },
   "peerDependencies": {
-    "react": "^16.0.0 || ^17.0.0 || ^18.0.0"
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
     "@types/estree": "^1.0.0",
