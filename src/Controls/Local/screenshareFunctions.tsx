@@ -1,4 +1,8 @@
-import AgoraRTC, { ILocalVideoTrack, UID } from 'agora-rtc-react'
+import AgoraRTC, {
+  IAgoraRTCClient,
+  ILocalVideoTrack,
+  UID
+} from 'agora-rtc-react'
 
 const startScreenshare = async (
   appId: string,
@@ -9,11 +13,14 @@ const startScreenshare = async (
   tokenUrl?: string,
   enableDualStream?: boolean
 ) => {
-  const screenClient = AgoraRTC.createClient({
-    mode: 'live',
-    role: 'host',
-    codec: 'vp8'
-  })
+  let screenClient: IAgoraRTCClient
+  if (typeof window !== 'undefined') {
+    screenClient = AgoraRTC.createClient({
+      mode: 'live',
+      role: 'host',
+      codec: 'vp8'
+    })
+  }
   let returnedUid: UID = 0
 
   const uid = screenshareUid || 1 // 1 is default
